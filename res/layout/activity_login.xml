@@ -1,0 +1,66 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${relativePackage}.${activityClass}" >
+    
+    <include
+        android:id="@+id/header"
+        layout="@layout/header" />
+    
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:layout_below="@id/header"
+		    android:paddingBottom="16dp"
+		    android:paddingLeft="16dp"
+		    android:paddingRight="16dp"
+		    android:paddingTop="16dp">
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="用户名"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/userpwd"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="密码"
+                android:imeActionLabel="完成"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/loginbtn"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="登录"
+                android:background="#128bed"
+                android:textColor="#fff"
+                android:textStyle="bold" />
+        </LinearLayout>
+    
+   
+	<ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+		
+    
+
+</RelativeLayout>
+
+
