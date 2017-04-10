@@ -18,6 +18,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,19 +50,22 @@ public class DeviceListActivity extends Activity {
 	    	if(user.getAreaId()>0){
 	    		url = mUrl+"?areaId="+user.getAreaId();
 	    	}
+	    	
 	    	String content = HttpUtil.getStrFromUrl(url);
-	    	JSONObject jsonObject =  JSON.parseObject(content);
-	    	JSONArray jDevices = jsonObject.getJSONArray("result");
-	    	mDataList.clear();
-	    	for(int i=0;i<jDevices.size();i++){
-	    		Device device = jDevices.getObject(i, Device.class);
-	    		if(device.getOnline()==1){
-	    			mDataList.add(device);
-	    		}
+	    	if(!content.equals("")){
+	    		JSONObject jsonObject =  JSON.parseObject(content);
+		    	JSONArray jDevices = jsonObject.getJSONArray("result");
+		    	mDataList.clear();
+		    	for(int i=0;i<jDevices.size();i++){
+		    		Device device = jDevices.getObject(i, Device.class);
+		    		if(device.getOnline()==1){
+		    			mDataList.add(device);
+		    		}
+		    	}
+		        Message message = new Message();  
+		        message.what = 6;  
+		        handler.sendMessage(message);  
 	    	}
-	        Message message = new Message();  
-	        message.what = 6;  
-	        handler.sendMessage(message);  
 	    }  
 	}; 
 	
