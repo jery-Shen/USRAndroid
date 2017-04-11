@@ -1,7 +1,5 @@
 /bin/
 /.settings/
-project.properties
 .classpath
 .project
-
-
+/project.properties
