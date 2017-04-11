@@ -38,8 +38,10 @@
             android:name=".DeviceDetailActivity"
             android:label="@string/title_activity_device_detail" >
         </activity>
+        <activity
+            android:name=".DeviceSetActivity"
+            android:label="@string/title_activity_device_set" >
+        </activity>
     </application>
 
 </manifest>
-
-

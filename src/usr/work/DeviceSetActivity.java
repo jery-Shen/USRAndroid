@@ -1,90 +1,39 @@
 package usr.work;
 
-import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+import usr.work.DeviceDetailActivity.JsBridge;
 import usr.work.bean.Device;
-import usr.work.utils.HttpUtil;
 
-public class DeviceDetailActivity extends Activity {
+public class DeviceSetActivity extends Activity {
 
-	
-	TextView rightText;
-	
-	String url = HttpUtil.URL_PRE+"GetDeviceDetail";
-	
 	WebView webView;
 	private TextView top_title;
 	private Device device;
 	private int deviceId;
 	
-	
-	DecimalFormat df = new DecimalFormat("#.00");
-	private final Timer timer = new Timer();
-	private TimerTask task = new TimerTask() {  
-	    @Override  
-	    public void run() {  
-	        Message message = new Message();  
-	        message.what = 6;  
-	        handler.sendMessage(message);  
-	    }  
-	}; 
-
-	Handler handler = new Handler(){
-		public void handleMessage(Message msg) {
-			if(msg.what==6){
-				if(device!=null){
-					device = getDeviceById(deviceId);
-					webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
-				}
-				//Log.i("syj", JSON.toJSONString(device));
-			}
-		}
-	};
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_device_detail);
-		
-		rightText = (TextView) findViewById(R.id.right_text);
-		rightText.setVisibility(View.VISIBLE);
+		setContentView(R.layout.activity_device_set);
 		
 		deviceId = getIntent().getIntExtra("deviceId", 0);
 		top_title = (TextView) findViewById(R.id.top_title);
 		top_title.setText("设备"+deviceId);
 		backBtn();
 		device = getDeviceById(deviceId);
-		timer.schedule(task, 0, 1000);
-		
-		rightText.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				Intent intent = new Intent(DeviceDetailActivity.this,DeviceSetActivity.class);
-				intent.putExtra("deviceId",deviceId);
-				startActivity(intent);
-				
-			}
-		});
 		
 		webView = (WebView) findViewById(R.id.webview);
 		webView.setWebViewClient(new WebViewClient() {
@@ -100,8 +49,7 @@ public class DeviceDetailActivity extends Activity {
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.addJavascriptInterface(new JsBridge(), "JsBridge");
 		
-		webView.loadUrl("file:///android_asset/deviceDetail.html"); 
-		
+		webView.loadUrl("file:///android_asset/deviceSet.html"); 
 	}
 	
 	private Device getDeviceById(int deviceId){
@@ -114,12 +62,6 @@ public class DeviceDetailActivity extends Activity {
 		return null;
 	}
 	
-	@Override
-	protected void onDestroy() {
-		timer.cancel();
-		super.onDestroy();
-	}
-	
 	private void backBtn() {
 		findViewById(R.id.btn_exit).setVisibility(View.VISIBLE);
 		findViewById(R.id.btn_exit).setOnClickListener(new View.OnClickListener() {
@@ -129,7 +71,6 @@ public class DeviceDetailActivity extends Activity {
 			}
 		});
 	}
-	
 	
 	class JsBridge{
 		
@@ -143,6 +84,4 @@ public class DeviceDetailActivity extends Activity {
            Log.i("syj", "kkkkkkkkkkkkkkk11111");
         }
 	}
-
-	
 }

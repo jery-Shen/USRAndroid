@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>修改设备参数</title>
+<link rel="stylesheet" type="text/css" href="css/weui.min.css">
+<style type="text/css">
+body {
+	background: #eee;
+}
+.weui-switch:checked {
+    border-color: #128bed;
+    background-color: #128bed;
+}
+.weui-btn_primary{
+	background-color: #128bed;
+}
+</style>
+</head>
+
+<body>
+	<div id="app">
+		<div class="weui-cells__title">温度参数</div>
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">当前温度</label>
+				</div>
+				<div class="weui-cell__bd">
+					{{device.temp}}
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">温度上限</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.tempUpLimit" class="weui-input" type="number" pattern="[0-9]*">
+				</div>
+			</div>
+			
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">温度下线</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.tempDownLimit" class="weui-input" type="number" pattern="[0-9]*">
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-cells__title">湿度参数</div>
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">当前湿度</label>
+				</div>
+				<div class="weui-cell__bd">
+					{{device.hr}}
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">湿度上限</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.hrUpLimit" class="weui-input" type="number" pattern="[0-9]*">
+				</div>
+			</div>
+			
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">湿度下线</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.hrDownLimit" class="weui-input" type="number" pattern="[0-9]*">
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-cells__title">压差参数</div>
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">当前压差</label>
+				</div>
+				<div class="weui-cell__bd">
+					{{device.dp}}
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">压差上限</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.dpUpLimit" class="weui-input" type="number" pattern="[0-9]*">
+				</div>
+			</div>
+			
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">压差下线</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.dpDownLimit" class="weui-input" type="number" pattern="[0-9]*">
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-cells__title">报警参数</div>
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell weui-cell_switch">
+				<div class="weui-cell__bd">温度报警开关</div>
+				<div class="weui-cell__ft">
+					<input v-model="device.tempAlarmClose" class="weui-switch" type="checkbox">
+				</div>
+			</div>
+			<div class="weui-cell weui-cell_switch">
+				<div class="weui-cell__bd">湿度报警开关</div>
+				<div class="weui-cell__ft">
+					<input v-model="device.hrAlarmClose" class="weui-switch" type="checkbox">
+				</div>
+			</div>
+			<div class="weui-cell weui-cell_switch">
+				<div class="weui-cell__bd">压差报警开关</div>
+				<div class="weui-cell__ft">
+					<input v-model="device.dpAlarmClose" class="weui-switch" type="checkbox">
+				</div>
+			</div>
+			<div class="weui-cell weui-cell_switch">
+				<div class="weui-cell__bd">自动风量报警开关</div>
+				<div class="weui-cell__ft">
+					<input v-model="device.inWindAlarmClose" class="weui-switch" type="checkbox">
+				</div>
+			</div>
+		</div>
+		
+		<div class="weui-btn-area" style="margin-bottom:30px;">
+			<a @click="saveDevice()"  class="weui-btn weui-btn_primary">保存</a>
+		</div>
+		
+	</div>
+
+
+
+
+	<script src="js/vue.min.js"></script>
+	<script src="js/vue-resource.min.js"></script>
+	<script type="text/javascript">
+		var device 
+		var app = new Vue({
+
+			created : function() {
+				this.deviceId = getQueryString('deviceId');
+				this.areaId = getQueryString('areaId');
+				var that = this;
+
+				that.$http.get('http://usr.lightxx.cn:8080/USR/GetDeviceDetail', {
+					params : {
+						deviceId : that.deviceId,
+						areaId : that.areaId
+					}
+				}).then(function(res) {
+					if (res.body) {
+						device = extendCopy(res.body.result);
+						that.device = res.body.result;
+					}
+				});
+			},
+			data : {
+				areaId : 1,
+				deviceId : 1,
+				device : {}
+			},
+			methods:{
+				saveDevice:function(){
+					
+					var param = {};
+					if(this.device.tempUpLimit!=device.tempUpLimit){
+						param.tempUpLimit = this.device.tempUpLimit;
+					}
+					if(this.device.tempDownLimit!=device.tempDownLimit){
+						param.tempDownLimit = this.device.tempDownLimit;
+					}
+					if(this.device.hrUpLimit!=device.hrUpLimit){
+						param.hrUpLimit = this.device.hrUpLimit;
+					}
+					if(this.device.hrDownLimit!=device.hrDownLimit){
+						param.hrDownLimit = this.device.hrDownLimit;
+					}
+					if(this.device.dpUpLimit!=device.dpUpLimit){
+						param.dpUpLimit = this.device.dpUpLimit;
+					}
+					if(this.device.dpDownLimit!=device.dpDownLimit){
+						param.dpDownLimit = this.device.dpDownLimit;
+					}
+					if(this.device.tempAlarmClose!=device.tempAlarmClose){
+						param.tempAlarmClose = Number(this.device.tempAlarmClose);
+					}
+					if(this.device.hrAlarmClose!=device.hrAlarmClose){
+						param.hrAlarmClose = Number(this.device.hrAlarmClose);
+					}
+					if(this.device.dpAlarmClose!=device.dpAlarmClose){
+						param.dpAlarmClose = Number(this.device.dpAlarmClose);
+					}
+					if(this.device.inWindAlarmClose!=device.inWindAlarmClose){
+						param.inWindAlarmClose = Number(this.device.inWindAlarmClose);
+					}
+					if(!isEmptyObject(param)){
+						param.areaId = 1;
+						param.deviceId = 2;
+						console.info(param);
+						
+						
+						var that = this;
+			            that.$http.post('http://usr.lightxx.cn:8080/USR/UpdateDevice',param,{emulateJSON:true,headers:{'Content-Type':'application/x-www-form-urlencoded'}}).then(function(res){
+			                if(res.body.status==200){
+			                    console.info('success');
+			                }else{
+			                    alert(res.body.error);
+			                }
+			            });
+					}
+				}
+			}
+		}).$mount('#app');
+
+		function getQueryString(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return decodeURIComponent(r[2]);
+			return 0;
+		}
+		
+		function extendCopy(p) {
+		　　　　var c = {};
+		　　　　for (var i in p) { 
+		　　　　　　c[i] = p[i];
+		　　　　}
+		　　　　c.uber = p;
+		　　　　return c;
+		　}
+		
+		function isEmptyObject(e) {  
+		    var t;  
+		    for (t in e)  
+		        return !1;  
+		    return !0  
+		}  
+
+	</script>
+</body>
+</html>

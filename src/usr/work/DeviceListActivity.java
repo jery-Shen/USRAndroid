@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ public class DeviceListActivity extends Activity {
 	public static List<Device> mDataList;
 	int areaId;
 	private ProgressBar loading;
+	ImageView rightBtn;
 	String mUrl = HttpUtil.URL_PRE+"GetDeviceList";
 	
 	DecimalFormat df = new DecimalFormat("#.00");
@@ -91,7 +93,8 @@ public class DeviceListActivity extends Activity {
 		
 		loading = (ProgressBar)findViewById(R.id.loading);
 		listView = (ListView) findViewById(R.id.listview);
-		
+		rightBtn = (ImageView) findViewById(R.id.right_btn);
+		rightBtn.setVisibility(View.VISIBLE);
 		SharedPreferences preferences = getSharedPreferences("set", 0);
 		String userStr = preferences.getString("user", "");
 		user = JSON.parseObject(userStr, User.class);
