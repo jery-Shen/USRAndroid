@@ -34,6 +34,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import usr.work.bean.Device;
 import usr.work.bean.User;
 import usr.work.utils.HttpUtil;
@@ -107,24 +108,13 @@ public class DeviceListActivity extends Activity {
 		String userStr = preferences.getString("user", "");
 		user = JSON.parseObject(userStr, User.class);
 		
-//		findViewById(R.id.right_btn).setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View arg0) {
-//				SharedPreferences preferences = getSharedPreferences("set", 0);
-//				Editor editor = preferences.edit();
-//				editor.putString("user", "");
-//				editor.commit();
-//				loading.setVisibility(View.VISIBLE);
-//				
-//			}
-//		});
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				Intent intent = new Intent(DeviceListActivity.this,DeviceDetailActivity.class);
 				Device info = mDataList.get(position);
+				intent.putExtra("areaId",info.getAreaId());
 				intent.putExtra("deviceId",info.getDeviceId());
 				
 				startActivity(intent);
@@ -138,12 +128,10 @@ public class DeviceListActivity extends Activity {
 				if (popupwindow.isShowing()) {
 					popupwindow.dismiss();
 				} else {
-					popupwindow.showAsDropDown(v, -ViewUtil.dpToPx(getResources(),105), ViewUtil.dpToPx(getResources(),13));
+					popupwindow.showAsDropDown(v, 0, ViewUtil.dpToPx(getResources(),6));
 				}
 			}
 		});
-		
-		
 		
 		mDataList = new ArrayList<Device>();
 		
@@ -166,6 +154,38 @@ public class DeviceListActivity extends Activity {
 					popupwindow.dismiss();
 				}
 				return false;
+			}
+		});
+		popup_layout.findViewById(R.id.switch_wifi).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				Toast.makeText(DeviceListActivity.this, "开发中", Toast.LENGTH_SHORT).show();
+				popupwindow.dismiss();
+				
+			}
+		});
+		popup_layout.findViewById(R.id.refresh).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				Toast.makeText(DeviceListActivity.this, "开发中", Toast.LENGTH_SHORT).show();
+				popupwindow.dismiss();
+				
+			}
+		});
+		popup_layout.findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				SharedPreferences preferences = getSharedPreferences("set", 0);
+				Editor editor = preferences.edit();
+				editor.putString("user", "");
+				editor.commit();
+				popupwindow.dismiss();
+				Intent intent = new Intent(DeviceListActivity.this, LoginActivity.class);
+				startActivity(intent);
+				DeviceListActivity.this.finish();
 			}
 		});
 		

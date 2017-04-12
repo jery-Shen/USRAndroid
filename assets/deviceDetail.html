@@ -110,21 +110,21 @@ body{
             <div class="item col3">
                 <div class="data">温度显示值 <span>{{device.temp}}</span></div>
                 <div class="data">温度上限 <span>{{device.tempUpLimit}}</span></div>
-                <div class="data">温度下限 <span>{{device.tempUpLimit}}</span></div>
+                <div class="data">温度下限 <span>{{device.tempDownLimit}}</span></div>
                 <div class="data">温度偏差 <span>{{device.tempOff}}</span></div>
                 <div class="data">温度实测 <span>{{device.tempReally}}</span></div>
             </div>
             <div class="item col3">
                 <div class="data">湿度显示值 <span>{{device.hr}}</span> </div>
                 <div class="data">湿度上限 <span>{{device.hrUpLimit}}</span></div>
-                <div class="data">湿度下限 <span>{{device.hrUpLimit}}</span></div>
+                <div class="data">湿度下限 <span>{{device.hrDownLimit}}</span></div>
                 <div class="data">湿度偏差 <span>{{device.hrOff}}</span></div>
                 <div class="data">湿度实测 <span>{{device.hrReally}}</span></div>
             </div>
             <div class="item col3">
                 <div class="data">压差显示值 <span>{{device.dp}}</span></div>
                 <div class="data">压差上限 <span>{{device.dpUpLimit}}</span></div>
-                <div class="data">压差下限 <span>{{device.dpUpLimit}}</span></div>
+                <div class="data">压差下限 <span>{{device.dpDownLimit}}</span></div>
                 <div class="data">压差偏差 <span>{{device.dpOff}}</span></div>
                 <div class="data">压差实测 <span>{{device.dpReally}}</span></div>
             </div>
@@ -205,7 +205,6 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 	var app = new Vue({
 
 	  created:function(){
-	  	this.deviceId = getQueryString('deviceId');
 	  	var that = this;
         //this.device = formatDevice(JSON.parse(dataStr));
 	  },

@@ -32,6 +32,7 @@ public class DeviceDetailActivity extends Activity {
 	WebView webView;
 	private TextView top_title;
 	private Device device;
+	private int areaId;
 	private int deviceId;
 	
 	
@@ -50,7 +51,7 @@ public class DeviceDetailActivity extends Activity {
 		public void handleMessage(Message msg) {
 			if(msg.what==6){
 				if(device!=null){
-					device = getDeviceById(deviceId);
+					device = getDeviceById(areaId,deviceId);
 					webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
 				}
 				//Log.i("syj", JSON.toJSONString(device));
@@ -66,19 +67,21 @@ public class DeviceDetailActivity extends Activity {
 		
 		rightText = (TextView) findViewById(R.id.right_text);
 		rightText.setVisibility(View.VISIBLE);
-		
+		areaId = getIntent().getIntExtra("areaId", 0);
 		deviceId = getIntent().getIntExtra("deviceId", 0);
 		top_title = (TextView) findViewById(R.id.top_title);
 		top_title.setText("设备"+deviceId);
 		backBtn();
-		device = getDeviceById(deviceId);
-		timer.schedule(task, 0, 1000);
+		
+		device = getDeviceById(areaId,deviceId);
+		timer.schedule(task, 500, 1000);
 		
 		rightText.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent(DeviceDetailActivity.this,DeviceSetActivity.class);
+				intent.putExtra("areaId",areaId);
 				intent.putExtra("deviceId",deviceId);
 				startActivity(intent);
 				
@@ -94,19 +97,24 @@ public class DeviceDetailActivity extends Activity {
 				view.loadUrl(url);
 				return true;
 			}
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				// TODO Auto-generated method stub
+				super.onPageFinished(view, url);
+				webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
+			}
 		});
 		
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.addJavascriptInterface(new JsBridge(), "JsBridge");
-		
 		webView.loadUrl("file:///android_asset/deviceDetail.html"); 
 		
 	}
 	
-	private Device getDeviceById(int deviceId){
+	private Device getDeviceById(int areaId, int deviceId){
 		List<Device> deviceList = DeviceListActivity.mDataList;
 		for(Device device:deviceList){
-			if(device!=null&&device.getDeviceId()==deviceId){
+			if(device!=null&&device.getDeviceId()==deviceId&&device.getAreaId()==areaId){
 				return device;
 			}
 		}
