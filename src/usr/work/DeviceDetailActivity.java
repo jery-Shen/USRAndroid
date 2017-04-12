@@ -6,7 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;

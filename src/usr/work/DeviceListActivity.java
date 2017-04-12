@@ -15,29 +15,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import usr.work.bean.Device;
 import usr.work.bean.User;
 import usr.work.utils.HttpUtil;
+import usr.work.utils.ViewUtil;
 
 public class DeviceListActivity extends Activity {
 
 	ListView listView;
 	public static User user;
 	public static List<Device> mDataList;
+	private PopupWindow popupwindow;
 	int areaId;
 	private ProgressBar loading;
 	ImageView rightBtn;
@@ -95,22 +102,23 @@ public class DeviceListActivity extends Activity {
 		listView = (ListView) findViewById(R.id.listview);
 		rightBtn = (ImageView) findViewById(R.id.right_btn);
 		rightBtn.setVisibility(View.VISIBLE);
+		rightBtn.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.wv_menu));
 		SharedPreferences preferences = getSharedPreferences("set", 0);
 		String userStr = preferences.getString("user", "");
 		user = JSON.parseObject(userStr, User.class);
 		
-		findViewById(R.id.right_btn).setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				SharedPreferences preferences = getSharedPreferences("set", 0);
-				Editor editor = preferences.edit();
-				editor.putString("user", "");
-				editor.commit();
-				loading.setVisibility(View.VISIBLE);
-				
-			}
-		});
+//		findViewById(R.id.right_btn).setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				SharedPreferences preferences = getSharedPreferences("set", 0);
+//				Editor editor = preferences.edit();
+//				editor.putString("user", "");
+//				editor.commit();
+//				loading.setVisibility(View.VISIBLE);
+//				
+//			}
+//		});
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
@@ -122,11 +130,46 @@ public class DeviceListActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+		
+		initMenu();
+		rightBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (popupwindow.isShowing()) {
+					popupwindow.dismiss();
+				} else {
+					popupwindow.showAsDropDown(v, -ViewUtil.dpToPx(getResources(),105), ViewUtil.dpToPx(getResources(),13));
+				}
+			}
+		});
+		
+		
+		
 		mDataList = new ArrayList<Device>();
 		
 		timer.schedule(task, 0, 2000);
 		
 		
+	}
+	
+	
+	private void initMenu() {
+		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+		RelativeLayout popup_layout = (RelativeLayout) inflater.inflate(R.layout.popup_online_menu, null);
+
+		popupwindow = new PopupWindow(popup_layout, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		popup_layout.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				// TODO Auto-generated method stub
+				if (popupwindow.isShowing()) {
+					popupwindow.dismiss();
+				}
+				return false;
+			}
+		});
+		
+
 	}
 	
 	@Override
