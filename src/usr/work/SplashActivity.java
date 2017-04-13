@@ -19,50 +19,17 @@ import android.widget.Toast;
 
 public class SplashActivity extends Activity {
 	
-	private final Timer timer = new Timer();
-	int i=0;
-	private TimerTask task = new TimerTask() {  
-	    @Override  
-	    public void run() {  
-	        Message message = new Message();  
-	        message.what = 6;  
-	        handler.sendMessage(message);  
-	    }  
-	}; 
 
-	Handler handler = new Handler(){
-		public void handleMessage(Message msg) {
-			if(msg.what==6){
-				i++;
-				Log.i("syj", "haha");
-				Toast.makeText(SplashActivity.this, "HI"+i, Toast.LENGTH_SHORT).show();
-				NotificationManager nm=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-				PendingIntent contentIndent = PendingIntent.getActivity(SplashActivity.this, 0, new Intent(SplashActivity.this,SplashActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);  
-
-		        Notification noti = new Notification.Builder(SplashActivity.this)
-		        		.setContentIntent(contentIndent)
-		                .setContentTitle("New mail from ")
-		                .setContentText("bbb"+i)
-		                .setWhen(1000)
-		                .setSmallIcon(R.drawable.wv_back)
-
-		                .build();
-		        nm.notify(5, noti);
-		        
-			}
-		}
-	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_splash);
+		//setContentView(R.layout.activity_splash);
 		SharedPreferences preferences = getSharedPreferences("set", 0);
 		String userStr = preferences.getString("user", "");
-		
-		//timer.schedule(task, 0, 3000);
+
 		
 		
         

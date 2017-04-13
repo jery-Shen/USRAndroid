@@ -1,14 +1,16 @@
 package usr.work;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.webkit.JavascriptInterface;
@@ -17,8 +19,9 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import usr.work.DeviceDetailActivity.JsBridge;
 import usr.work.bean.Device;
+import usr.work.utils.HttpUtil;
+import usr.work.utils.Md5;
 
 public class DeviceSetActivity extends Activity {
 
@@ -29,6 +32,7 @@ public class DeviceSetActivity extends Activity {
 	private int areaId;
 	private int deviceId;
 	private ProgressBar loading;
+	String mUrl = HttpUtil.URL_PRE+"UpdateDevice";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +108,62 @@ public class DeviceSetActivity extends Activity {
 		});
 	}
 	
+	private class UpdateDeviceTask extends AsyncTask<String, Integer, String>{
+		@Override
+		protected String doInBackground(String... params) {
+			String paramsStr = params[0];
+			Map<String, Object> paramMap = JSON.parseObject(paramsStr,new TypeReference<Map<String, Object>>(){} );
+			StringBuffer postParams = new StringBuffer();
+			String timestamp = System.currentTimeMillis()/1000+"";
+			for (Map.Entry<String, Object> entry : paramMap.entrySet()) {  
+				postParams.append(entry.getKey() + "=" + entry.getValue());  
+				postParams.append("&");  
+		    } 
+			postParams.append("timestamp="+timestamp);
+			Log.i("syj", postParams.toString());
+			String token = Md5.encrypt(postParams.toString()+"USR"+timestamp);
+			
+			String url = mUrl+"?token="+token;
+			Log.i("syj", token);
+			String content = HttpUtil.postUrl(url, postParams.toString());
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return content;
+		}
+		
+		@Override
+		protected void onPostExecute(String content) {
+			loading.setVisibility(View.INVISIBLE);
+			JSONObject jsonObject = JSON.parseObject(content);
+			if(jsonObject.getIntValue("status")==200){
+				DeviceSetActivity.this.setResult(8);
+				DeviceSetActivity.this.finish();
+			}else{
+				Toast.makeText(DeviceSetActivity.this, jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
+				
+			}
+		}
+	}
+	
 	class JsBridge{
 		
 		@JavascriptInterface
-		public void saveSuccess(){
+		public void updateDevice(String paramsStr){
+			runOnUiThread(new Runnable() {
+				public void run() {
+					loading.setVisibility(View.VISIBLE);
+				}
+			});
+			new UpdateDeviceTask().execute(paramsStr);
+				
+        }
+		
+		@JavascriptInterface
+		public void noChange(){
 			runOnUiThread(new Runnable() {
 				public void run() {
 					loading.setVisibility(View.INVISIBLE);

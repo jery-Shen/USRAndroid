@@ -18,8 +18,8 @@ body {
 	background-color: #128bed;
 }
 
-.weui-btn_primary {
-	background-color: #128bed;
+.text_grey {
+	color: #999;
 }
 </style>
 </head>
@@ -30,9 +30,9 @@ body {
 		<div class="weui-cells weui-cells_form">
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
-					<label id="temp" class="weui-label">当前温度</label>
+					<label class="weui-label">当前温度</label>
 				</div>
-				<div class="weui-cell__bd">{{device.temp}}</div>
+				<div class="weui-cell__bd text_grey">{{device.temp}}</div>
 			</div>
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
@@ -61,7 +61,7 @@ body {
 				<div class="weui-cell__hd">
 					<label class="weui-label">当前湿度</label>
 				</div>
-				<div class="weui-cell__bd">{{device.hr}}</div>
+				<div class="weui-cell__bd text_grey">{{device.hr}}</div>
 			</div>
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
@@ -90,7 +90,7 @@ body {
 				<div class="weui-cell__hd">
 					<label class="weui-label">当前压差</label>
 				</div>
-				<div class="weui-cell__bd">{{device.dp}}</div>
+				<div class="weui-cell__bd text_grey">{{device.dp}}</div>
 			</div>
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
@@ -211,11 +211,13 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 					param.inWindAlarmClose = Number(this.device.inWindAlarmClose);
 				}
 				if(!isEmptyObject(param)){
-					param.areaId = 1;
-					param.deviceId = 2;
+					param.areaId = this.device.areaId;
+					param.deviceId = this.device.deviceId;
 					console.info(JSON.stringify(param));
 					
-					window.JsBridge.showLoading();
+					window.JsBridge.updateDevice(JSON.stringify(param));
+					
+					/* window.JsBridge.showLoading();
 					var that = this;
 		            that.$http.post('http://usr.lightxx.cn:8080/USR/UpdateDevice',param,{emulateJSON:true,headers:{'Content-Type':'application/x-www-form-urlencoded'}}).then(function(res){
 		                if(res.body.status==200){
@@ -223,9 +225,11 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 		                }else{
 		                	window.JsBridge.saveError(res.body.error);
 		                }
-		            });
+		            }); */
+		            
+		            
 				}else{
-					window.JsBridge.saveSuccess();
+					window.JsBridge.noChange();
 				}
 			}
 		}

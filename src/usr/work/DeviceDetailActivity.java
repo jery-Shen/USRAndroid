@@ -83,8 +83,7 @@ public class DeviceDetailActivity extends Activity {
 				Intent intent = new Intent(DeviceDetailActivity.this,DeviceSetActivity.class);
 				intent.putExtra("areaId",areaId);
 				intent.putExtra("deviceId",deviceId);
-				startActivity(intent);
-				
+				startActivityForResult(intent, 1);
 			}
 		});
 		
@@ -135,6 +134,19 @@ public class DeviceDetailActivity extends Activity {
 				finish();
 			}
 		});
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(resultCode==8){
+			if(device!=null){
+				device = getDeviceById(areaId,deviceId);//把device传过来
+				webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
+			}
+		}
 	}
 	
 	
