@@ -6,8 +6,15 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+import usr.work.bean.User;
 
 public class HttpUtil {
 	public final static String URL_PRE = "http://test.lightxx.cn:8080/USR/";
@@ -38,8 +45,6 @@ public class HttpUtil {
 	}
 	
 	public static String postUrl(String url,String params){
-		
-		
 		HttpURLConnection conn = null;
 		StringBuffer buffer = new StringBuffer();
 		try {
@@ -66,5 +71,19 @@ public class HttpUtil {
 			e.printStackTrace();
 		}
 		return buffer.toString();
+	}
+	
+	public static Map<String, String> getSign(Context context){
+		HashMap<String, String>  map = new HashMap<String, String>();
+		SharedPreferences preferences = context.getSharedPreferences("set", 0);
+		String userStr = preferences.getString("user", "");
+		User user = JSON.parseObject(userStr, User.class);
+		String token = user.getUserName();
+		String timestamp = System.currentTimeMillis()/1000 + "";
+		String sign = Md5.encrypt(token + "USR" + timestamp);
+		map.put("token", token);
+		map.put("timestamp", timestamp);
+		map.put("sign", sign);
+		return map;
 	}
 }
