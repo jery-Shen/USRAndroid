@@ -3,6 +3,7 @@ package usr.work;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,6 +20,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,24 +59,37 @@ public class DeviceListActivity extends Activity {
 	    @Override  
 	    public void run() {  
 	    	String url = mUrl;
+	    	Map<String, String> map =  HttpUtil.getSign(DeviceListActivity.this);
 	    	if(user.getAreaId()>0){
-	    		url = mUrl+"?areaId="+user.getAreaId();
+	    		url = url + "?areaId="+user.getAreaId();
+	    		url = url + "&token=" + map.get("token")+"&timestamp="+map.get("timestamp")+"&sign="+map.get("sign");
+	    	}else{
+	    		url = url + "?token=" + map.get("token")+"&timestamp="+map.get("timestamp")+"&sign="+map.get("sign");
 	    	}
-	    	
+
 	    	String content = HttpUtil.getStrFromUrl(url);
+
 	    	if(!content.equals("")){
 	    		JSONObject jsonObject =  JSON.parseObject(content);
-		    	JSONArray jDevices = jsonObject.getJSONArray("result");
-		    	mDataList.clear();
-		    	for(int i=0;i<jDevices.size();i++){
-		    		Device device = jDevices.getObject(i, Device.class);
-		    		if(device.getOnline()==1){
-		    			mDataList.add(device);
-		    		}
-		    	}
-		        Message message = new Message();  
-		        message.what = 6;  
-		        handler.sendMessage(message);  
+	    		if(jsonObject.getIntValue("status")==200){
+	    			JSONArray jDevices = jsonObject.getJSONArray("result");
+			    	mDataList.clear();
+			    	for(int i=0;i<jDevices.size();i++){
+			    		Device device = jDevices.getObject(i, Device.class);
+			    		if(device.getOnline()==1){
+			    			mDataList.add(device);
+			    		}
+			    	}
+			        Message message = new Message();  
+			        message.what = 6;  
+			        handler.sendMessage(message);  
+	    		}else{
+	    			Log.i("syj", jsonObject.getString("error"));
+	    		}
+	    	}else{
+	    		Message message = new Message();  
+		        message.what = 11;  
+		        handler.sendMessage(message); 
 	    	}
 	    }  
 	}; 
@@ -89,6 +104,8 @@ public class DeviceListActivity extends Activity {
 				}
 				
 
+			}else if(msg.what==11){
+				//Toast.makeText(DeviceListActivity.this, "网络连接错误",Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
@@ -239,8 +256,4 @@ public class DeviceListActivity extends Activity {
 		public TextView des;
 	}
 	
-	
-		
-		
-
 }

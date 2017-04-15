@@ -121,10 +121,11 @@ public class DeviceSetActivity extends Activity {
 		    } 
 			postParams.append("timestamp="+timestamp);
 			Log.i("syj", postParams.toString());
-			String token = Md5.encrypt(postParams.toString()+"USR"+timestamp);
+
+			String url = mUrl;
+			Map<String, String> map =  HttpUtil.getSign(DeviceSetActivity.this);
+			url = url + "?token=" + map.get("token")+"&timestamp="+map.get("timestamp")+"&sign="+map.get("sign");
 			
-			String url = mUrl+"?token="+token;
-			Log.i("syj", token);
 			String content = HttpUtil.postUrl(url, postParams.toString());
 			try {
 				Thread.sleep(2000);
@@ -138,14 +139,19 @@ public class DeviceSetActivity extends Activity {
 		@Override
 		protected void onPostExecute(String content) {
 			loading.setVisibility(View.INVISIBLE);
-			JSONObject jsonObject = JSON.parseObject(content);
-			if(jsonObject.getIntValue("status")==200){
-				DeviceSetActivity.this.setResult(8);
-				DeviceSetActivity.this.finish();
+			if(!content.equals("")){
+				JSONObject jsonObject = JSON.parseObject(content);
+				if(jsonObject.getIntValue("status")==200){
+					DeviceSetActivity.this.setResult(8);
+					DeviceSetActivity.this.finish();
+				}else{
+					Toast.makeText(DeviceSetActivity.this, jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
+					
+				}
 			}else{
-				Toast.makeText(DeviceSetActivity.this, jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
-				
+				Toast.makeText(DeviceSetActivity.this, "网络连接错误",Toast.LENGTH_SHORT).show();
 			}
+			
 		}
 	}
 	

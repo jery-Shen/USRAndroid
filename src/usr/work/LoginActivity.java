@@ -1,6 +1,7 @@
 package usr.work;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import android.app.Activity;
@@ -32,7 +33,7 @@ public class LoginActivity extends Activity{
     private EditText mUserPwd;
     private ProgressBar loading;
     
-    String mUrl = HttpUtil.URL_PRE+"GetUser";
+    String mUrl = HttpUtil.URL_PRE+"Login";
     
 
     @Override
@@ -90,20 +91,28 @@ public class LoginActivity extends Activity{
 		@Override
 		protected void onPostExecute(String content) {
 			loading.setVisibility(View.INVISIBLE);
-			JSONObject jsonObject = JSON.parseObject(content);
-			if(jsonObject.getIntValue("status")==200){
-				JSONObject jUser = jsonObject.getJSONObject("result");
-				SharedPreferences preferences = getSharedPreferences("set", 0);
-				Editor editor = preferences.edit();
-				editor.putString("user", jUser.toJSONString());
-				editor.commit();
-				Intent intent = new Intent(LoginActivity.this, DeviceListActivity.class);
-				startActivity(intent);
-				LoginActivity.this.finish();
+			if(!content.equals("")){
+				JSONObject jsonObject = JSON.parseObject(content);
+				if(jsonObject.getIntValue("status")==200){
+					JSONObject res = jsonObject.getJSONObject("result");
+					JSONObject jUser = res.getJSONObject("user");
+					JSONArray jHostList = res.getJSONArray("hostList");
+					SharedPreferences preferences = getSharedPreferences("set", 0);
+					Editor editor = preferences.edit();
+					editor.putString("user", jUser.toJSONString());
+					editor.putString("hostList", jHostList.toJSONString());
+					editor.commit();
+					Intent intent = new Intent(LoginActivity.this, DeviceListActivity.class);
+					startActivity(intent);
+					LoginActivity.this.finish();
+				}else{
+					Toast.makeText(LoginActivity.this, jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
+					
+				}
 			}else{
-				Toast.makeText(LoginActivity.this, jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
-				
+				Toast.makeText(LoginActivity.this, "网络连接错误",Toast.LENGTH_SHORT).show();
 			}
+			
 		}
 	}
 
