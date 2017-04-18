@@ -6,12 +6,12 @@
 
     <LinearLayout
         android:id="@+id/pop_line"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="3dp"
-        android:background="#fff"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/layer_border"
         android:orientation="vertical" >
 		<View
             android:layout_width="match_parent"
@@ -21,13 +21,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/wv_change_black" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="45dp"
                 android:gravity="center"
-                android:text="切换wifi"
+                android:text="切换wifi模式"
                 android:textColor="#333"
                 android:textSize="16dp" />
         </RelativeLayout>
@@ -37,17 +42,42 @@
             android:background="#ddd" />
 
        <RelativeLayout
+            android:id="@+id/help"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/wv_des_black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginLeft="45dp"
+                android:gravity="center"
+                android:text="使用说明"
+                android:textColor="#333"
+                android:textSize="16dp" />
+        </RelativeLayout>
+        <RelativeLayout
             android:id="@+id/refresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/wv_refresh_black" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="45dp"
                 android:gravity="center"
-                android:text="使用说明"
+                android:text="刷新"
                 android:textColor="#333"
                 android:textSize="16dp" />
         </RelativeLayout>
@@ -60,11 +90,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/wv_logout_black" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="45dp"
                 android:gravity="center"
                 android:text="注销登录"
                 android:textColor="#333"

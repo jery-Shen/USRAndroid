@@ -137,7 +137,7 @@ body{
             基本信息
         </div>
         <div class="list-body">
-            <div class="item col2"><div class="data">系统工作模式 <span>{{device.workMode}}</span></div></div>
+            <div class="item col2"><div class="data">控制模式 <span>{{device.workModeStr}}</span></div></div>
             <div class="item col2"><div class="data">换气次数 <span>{{device.airCount}}</span></div></div>
             <div class="item col2"><div class="data">进风变频速度 <span>{{device.inWindSpeed}}</span></div></div>
             <div class="item col2"><div class="data">出风变频速度 <span>{{device.outWindSpeed}}</span></div></div>
@@ -148,7 +148,7 @@ body{
             <div class="item col2"><div class="data">正负压模式 <span>{{device.akpModeStr}}</span></div></div>
             <div class="item col2"><div class="data">变频器连续最高 <span>{{device.converterMax}}</span></div></div>
             <div class="item col2"><div class="data">变频器连续最低 <span>{{device.converterMin}}</span></div></div>
-            <div class="item col2"><div class="data">变频器型号选择 <span>{{device.converterModelStr}}</span></div></div>
+            <div class="item col2"><div class="data">压差传感器型号 <span>{{device.converterModelStr}}</span></div></div>
             <div class="item col2"><div class="data">延周期检错 <span>{{device.cycleError}}</span></div></div>
             <div class="item col2"><div class="data">连续报警周期数 <span>{{device.alarmCycle}}</span></div></div>
             <div class="item col2"><div class="data">温度报警关闭 <span>{{device.tempAlarmCloseStr}}</span></div></div>
@@ -206,7 +206,7 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 
 	  created:function(){
 	  	var that = this;
-        //this.device = formatDevice(JSON.parse(dataStr));
+        this.device = formatDevice(JSON.parse(dataStr));
 	  },
 	  data: {
         deviceId:1,
@@ -266,7 +266,8 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
     		break;
 
     	}
-
+		
+    	device.workModeStr = device.workMode ? '自动' : '手动';
     	device.onlineStr = device.online ? '是' : '否';
     	device.communicateFalseStr = (device.communicateFalse == 0) ? '-'
     			: device.communicateFalse + '次';

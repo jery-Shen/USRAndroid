@@ -9,6 +9,8 @@ import com.alibaba.fastjson.JSON;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +20,7 @@ import android.view.Window;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.TextView;
 import usr.work.bean.Device;
 import usr.work.utils.HttpUtil;
@@ -25,7 +28,7 @@ import usr.work.utils.HttpUtil;
 public class DeviceDetailActivity extends Activity {
 
 	
-	TextView rightText;
+	ImageView rightBtn;
 	
 	String url = HttpUtil.URL_PRE+"GetDeviceDetail";
 	
@@ -65,8 +68,9 @@ public class DeviceDetailActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_device_detail);
 		
-		rightText = (TextView) findViewById(R.id.right_text);
-		rightText.setVisibility(View.VISIBLE);
+		rightBtn = (ImageView) findViewById(R.id.right_btn);
+		rightBtn.setVisibility(View.VISIBLE);
+		rightBtn.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.wv_edit_white));
 		areaId = getIntent().getIntExtra("areaId", 0);
 		deviceId = getIntent().getIntExtra("deviceId", 0);
 		top_title = (TextView) findViewById(R.id.top_title);
@@ -76,7 +80,7 @@ public class DeviceDetailActivity extends Activity {
 		device = getDeviceById(areaId,deviceId);
 		timer.schedule(task, 500, 1000);
 		
-		rightText.setOnClickListener(new View.OnClickListener() {
+		rightBtn.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {

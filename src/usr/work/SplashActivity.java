@@ -26,24 +26,32 @@ public class SplashActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		//setContentView(R.layout.activity_splash);
-		SharedPreferences preferences = getSharedPreferences("set", 0);
-		String userStr = preferences.getString("user", "");
+		setContentView(R.layout.activity_splash);
+		
 
 		
+		new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				SharedPreferences preferences = getSharedPreferences("set", 0);
+				String userStr = preferences.getString("user", "");
+				if(userStr.equals("")){
+					Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+					startActivity(intent);
+					SplashActivity.this.finish();
+				}else{
+					Intent intent = new Intent(SplashActivity.this, DeviceListActivity.class);
+					startActivity(intent);
+					SplashActivity.this.finish();
+				}
+				
+			}
+		}, 2000);
+        
+        
+        
 		
-        
-        
-        
-		if(userStr.equals("")){
-			Intent intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);
-			this.finish();
-		}else{
-			Intent intent = new Intent(this, DeviceListActivity.class);
-			startActivity(intent);
-			this.finish();
-		}
 		
 		
 		

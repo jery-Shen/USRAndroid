@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 
 import android.app.Activity;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.Window;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +28,7 @@ import usr.work.utils.Md5;
 public class DeviceSetActivity extends Activity {
 
 	WebView webView;
-	TextView rightText;
+	ImageView rightBtn;
 	private TextView top_title;
 	private Device device;
 	private int areaId;
@@ -47,15 +49,15 @@ public class DeviceSetActivity extends Activity {
 		top_title.setText("设备"+deviceId);
 		backBtn();
 		
-		rightText = (TextView) findViewById(R.id.right_text);
-		rightText.setText("保存");
-		rightText.setVisibility(View.VISIBLE);
+		rightBtn = (ImageView) findViewById(R.id.right_btn);
+		rightBtn.setVisibility(View.VISIBLE);
+		rightBtn.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.wv_save_white));
 		
 		loading = (ProgressBar) findViewById(R.id.loading);
 		
 		device = getDeviceById(areaId,deviceId);
 		
-		rightText.setOnClickListener(new View.OnClickListener() {
+		rightBtn.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
