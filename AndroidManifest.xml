@@ -42,6 +42,22 @@
             android:name=".DeviceSetActivity"
             android:label="@string/title_activity_device_set" >
         </activity>
+        <activity
+            android:name=".SetActivity"
+            android:label="@string/title_activity_set" >
+        </activity>
+        <activity
+            android:name=".UserActivity"
+            android:label="@string/title_activity_user" >
+        </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about" >
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/title_activity_help" >
+        </activity>
     </application>
 
 </manifest>

@@ -11,17 +11,29 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
         android:background="#fff" >
-        
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
+            
             android:gravity="center"
             android:text="111"
             android:textColor="#000" 
             android:textSize="16dp"/>
+        <ImageView
+        android:id="@+id/image"
+        android:src="@drawable/logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/title"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="5dp"/>
+        
+        
         
         <TextView
             android:id="@+id/time"
@@ -31,12 +43,25 @@
             android:gravity="center"
             android:text="2015-12-12"
             android:textColor="#aaa" />
+        
+        
 
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image"
+            android:layout_marginTop="6dp"
+            android:text="状态"
+            android:textColor="#aaa"
+            android:textStyle="bold"
+            android:textSize="20dp" />
+        
         <TextView
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
+            android:layout_below="@id/info"
             android:layout_marginTop="6dp"
             android:text="内容"
             android:textColor="#666"

@@ -9,5 +9,9 @@
     <string name="title_activity_device_detail">设备详情</string>
     <string name="title_activity_login">登录</string>
     <string name="title_activity_device_set">修改参数</string>
+    <string name="title_activity_set">SetActivity</string>
+    <string name="title_activity_user">UserActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_help">HelpActivity</string>
 
 </resources>

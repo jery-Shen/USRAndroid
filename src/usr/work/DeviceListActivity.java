@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -152,7 +153,7 @@ public class DeviceListActivity extends Activity {
 		
 		mDataList = new ArrayList<Device>();
 		
-		timer.schedule(task, 0, 2000);
+		timer.schedule(task, 0, 20000);
 		
 		
 	}
@@ -236,14 +237,24 @@ public class DeviceListActivity extends Activity {
 				holder.content = (TextView) row.findViewById(R.id.content);
 				holder.title = (TextView) row.findViewById(R.id.title);
 				holder.time = (TextView) row.findViewById(R.id.time);
+				holder.info = (TextView) row.findViewById(R.id.info);
 				holder.des = (TextView) row.findViewById(R.id.des);
 				row.setTag(holder);
 			} else {
 				holder = (ViewHolder) row.getTag();
 			}
+			int infoBar = info.getInfoBar();
+			holder.info.setText(stringOfInfoBar(infoBar));
+			if(infoBar==0){
+				holder.info.setTextColor(Color.parseColor("#cccccc"));
+			}else if(infoBar==1){
+				holder.info.setTextColor(Color.parseColor("#1aad19"));
+			}else{
+				holder.info.setTextColor(Color.parseColor("#e64340"));
+			}
 			holder.title.setText("设备"+info.getDeviceId());
 			holder.content.setText("温度:"+info.getTemp()+"，湿度:"+info.getHr()+"，压差:"+info.getDp());
-			holder.des.setText("目标压差:"+info.getDpTarget()+"，进风速度:"+df.format(info.getInWindSpeed()/100)+"，出风速度:"+df.format(info.getOutWindSpeed()/100));
+			holder.des.setText("换气期数:"+info.getAirCount()+"，进风速度:"+df.format(info.getInWindSpeed()/100)+"，目标压差:"+info.getDpTarget()+"，控制模式:"+(info.getWorkMode()==0?"手动":"自动"));
 			holder.time.setText(info.getUpdateTime());
 			return row;
 		}
@@ -253,7 +264,58 @@ public class DeviceListActivity extends Activity {
 		public TextView title;
 		public TextView content;
 		public TextView time;
+		public TextView info;
 		public TextView des;
+	}
+	
+	private static String stringOfInfoBar(int infoBar) {
+		String infoBarStr = "";
+		switch (infoBar) {
+		case 0:
+			infoBarStr = "待机状态，按开启键启动";
+			break;
+		case 1:
+			infoBarStr = "工作正常，按关闭键停止";
+			break;
+		case 2:
+			infoBarStr = "温度过低";
+			break;
+		case 3:
+			infoBarStr = "断电报警";
+			break;
+		case 4:
+			infoBarStr = "温度超高";
+			break;
+		case 5:
+			infoBarStr = "温度过低";
+			break;
+		case 6:
+			infoBarStr = "湿度超高";
+			break;
+		case 7:
+			infoBarStr = "湿度过低";
+			break;
+		case 8:
+			infoBarStr = "压差过高";
+			break;
+		case 9:
+			infoBarStr = "压差过低";
+			break;
+		case 10:
+			infoBarStr = "模拟量采集通讯故障";
+			break;
+		case 11:
+			infoBarStr = "进风自动调节上限";
+			break;
+		case 12:
+			infoBarStr = "进风自动调节下限";
+			break;
+		case 13:
+			infoBarStr = "模拟量采集通讯故障";
+			break;
+
+		}
+		return infoBarStr;
 	}
 	
 }
