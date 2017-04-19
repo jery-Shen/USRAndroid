@@ -13,14 +13,14 @@ body{
 }
 .head{
     background: #128bed;
-    
     color: #fff;
     padding: 15px 15px;
 }
 .head .logo{
-    height: 80px;
-    margin-left:40%;
     text-align: center;
+}
+.head .logo img{
+    width: 80px;
 }
 .infoBar{
 	height:42px;
@@ -131,7 +131,7 @@ body{
 
 <div id="app">
     <div class="head">
-        <img class="logo" src="img/logo.png">
+        <p class="logo"><img src="img/logo.png"></p>
         <div v-if="device.infoBar==0">
             <div class="infoBar text-disabled">{{device.infoBarStr}}</div>
         </div>
