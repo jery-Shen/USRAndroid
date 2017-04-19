@@ -15,17 +15,23 @@ body{
     background: #128bed;
     
     color: #fff;
-    padding: 5px 15px;
+    padding: 15px 15px;
+}
+.head .logo{
+    height: 80px;
+    margin-left:40%;
+    text-align: center;
 }
 .infoBar{
-	height:22px;
-    margin-left: 20px;
+	height:42px;
+    text-align: center;
+    width: 100%;
     font-weight: bolder;
     font-size: 16px;
     
 }
 .updateTime{
-    margin-top: -20px;
+    margin-top: -10px;
     font-size: 10px;
     float: right;
     color: #ddd;
@@ -33,6 +39,7 @@ body{
 .common{
     width: 100%;
     margin-top: 20px;
+    padding: 15px;
 }
 
 .item{
@@ -46,7 +53,7 @@ body{
 }
 .common .data span{
     position: absolute;
-    left: 75px;
+    left: 75px !important;
 
 }
 
@@ -59,6 +66,8 @@ body{
 .list-title{
     padding: 5px 15px;
     border-bottom: solid 1px #ddd;
+    color: #000;
+    font-weight: bolder;
 }
 .list-body{
     
@@ -70,6 +79,10 @@ body{
     border-right: solid 1px #ddd;
 }
 .base .data span{
+    position: absolute;
+    left: 135px;
+}
+.sys .data span{
     position: absolute;
     left: 135px;
 }
@@ -92,6 +105,21 @@ body{
 .col2{
     width: 50%;
 }
+.col1{
+    width: 100%;
+}
+
+.text-success{
+    color: #1aad19;
+}
+
+.text-error{
+    color: #e64340;
+}
+.text-disabled{
+    color: #cccccc;
+}
+
 
 
 </style>
@@ -103,10 +131,29 @@ body{
 
 <div id="app">
     <div class="head">
-        <div class="infoBar">{{device.infoBarStr}}</div>
+        <img class="logo" src="img/logo.png">
+        <div v-if="device.infoBar==0">
+            <div class="infoBar text-disabled">{{device.infoBarStr}}</div>
+        </div>
+        <div v-if="device.infoBar==1">
+            <div class="infoBar text-success">{{device.infoBarStr}}</div>
+        </div>
+        <div v-if="device.infoBar>1">
+            <div class="infoBar text-error">{{device.infoBarStr}}</div>
+        </div>
+        
+        
         <div class="updateTime">{{device.updateTime}}</div>
 
+        
+    </div>
+
+    <div class="list base">
+        <div class="list-title">
+            基本信息
+        </div>
         <div class="common">
+
             <div class="item col3">
                 <div class="data">温度显示值 <span>{{device.temp}}</span></div>
                 <div class="data">温度上限 <span>{{device.tempUpLimit}}</span></div>
@@ -130,12 +177,6 @@ body{
             </div>
             <div class="clearfix"></div>
         </div>
-    </div>
-
-    <div class="list base">
-        <div class="list-title">
-            基本信息
-        </div>
         <div class="list-body">
             <div class="item col2"><div class="data">控制模式 <span>{{device.workModeStr}}</span></div></div>
             <div class="item col2"><div class="data">换气次数 <span>{{device.airCount}}</span></div></div>
@@ -143,14 +184,31 @@ body{
             <div class="item col2"><div class="data">出风变频速度 <span>{{device.outWindSpeed}}</span></div></div>
             <div class="item col2"><div class="data">通讯连续错误 <span>{{device.communicateTrueStr}}</span></div></div>
             <div class="item col2"><div class="data">压差目标值 <span>{{device.dpTarget}}</span></div></div>
-            <div class="item col2"><div class="data">累计工作小时 <span>{{device.workHour}}</span></div></div>
-            <div class="item col2"><div class="data">累计工作秒数 <span>{{device.workSecond}}</span></div></div>
-            <div class="item col2"><div class="data">正负压模式 <span>{{device.akpModeStr}}</span></div></div>
+         
+          
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="list sys">
+        <div class="list-title">
+            系统参数
+        </div>
+        <div class="list-body">
+           
+            <div class="item col1"><div class="data">累计工作时间 <span>{{device.workTime}}</span></div></div>
+            
+           
+            
+            <div class="item col1"><div class="data">正负压模式 <span>{{device.akpModeStr}}</span></div></div>
+            <div class="item col1"><div class="data">压差传感器型号 <span>{{device.converterModelStr}}</span></div></div>
+
             <div class="item col2"><div class="data">变频器连续最高 <span>{{device.converterMax}}</span></div></div>
             <div class="item col2"><div class="data">变频器连续最低 <span>{{device.converterMin}}</span></div></div>
-            <div class="item col2"><div class="data">压差传感器型号 <span>{{device.converterModelStr}}</span></div></div>
+
             <div class="item col2"><div class="data">延周期检错 <span>{{device.cycleError}}</span></div></div>
             <div class="item col2"><div class="data">连续报警周期数 <span>{{device.alarmCycle}}</span></div></div>
+
             <div class="item col2"><div class="data">温度报警关闭 <span>{{device.tempAlarmCloseStr}}</span></div></div>
             <div class="item col2"><div class="data">湿度报警关闭 <span>{{device.hrAlarmCloseStr}}</span></div></div>
             <div class="item col2"><div class="data">压差报警关闭 <span>{{device.dpAlarmCloseStr}}</span></div></div>
@@ -221,6 +279,7 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
     }
 
     function formatDevice(device) {
+        device.infoBar = 0;
     	switch (device.infoBar) {
     	case 0:
     		device.infoBarStr = '待机状态，按开启键启动';
