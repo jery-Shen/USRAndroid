@@ -84,12 +84,18 @@ public class SetActivity extends Activity {
 		
 		@JavascriptInterface
 		public void about(){
-           
+           Intent intent = new Intent(SetActivity.this,WebActivity.class);
+           intent.putExtra("title", "关于我们");
+           intent.putExtra("url", "file:///android_asset/about.html");
+           startActivity(intent);
         }
 		
 		@JavascriptInterface
 		public void help(){
-           
+			Intent intent = new Intent(SetActivity.this,WebActivity.class);
+            intent.putExtra("title", "帮助系统");
+            intent.putExtra("url", "file:///android_asset/help.html");
+            startActivity(intent);
         }
 		
 		@JavascriptInterface

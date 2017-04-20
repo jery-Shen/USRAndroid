@@ -159,6 +159,17 @@ public class DeviceListActivity extends Activity {
 				loading.setVisibility(View.VISIBLE);
 			}
 		});
+		popup_layout.findViewById(R.id.instructe).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				popupwindow.dismiss();
+				Intent intent = new Intent(DeviceListActivity.this,WebActivity.class);
+	            intent.putExtra("title", "帮助系统");
+	            intent.putExtra("url", "file:///android_asset/instructe.html");
+	            startActivity(intent);
+			}
+		});
 		popup_layout.findViewById(R.id.set).setOnClickListener(new View.OnClickListener() {
 			
 			@Override
