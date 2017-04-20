@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,20 +22,24 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import usr.work.application.USRApplication;
 import usr.work.bean.Device;
+import usr.work.bean.User;
 import usr.work.utils.HttpUtil;
 import usr.work.utils.Md5;
 
 public class DeviceSetActivity extends Activity {
 
-	WebView webView;
-	ImageView rightBtn;
+	private WebView webView;
+	private ImageView rightBtn;
 	private TextView top_title;
+	private ProgressBar loading;
+	
 	private Device device;
 	private int areaId;
 	private int deviceId;
-	private ProgressBar loading;
-	String mUrl = HttpUtil.URL_PRE+"UpdateDevice";
+	
+	private String mUrl = HttpUtil.URL_PRE+"UpdateDevice";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +90,12 @@ public class DeviceSetActivity extends Activity {
 		
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.addJavascriptInterface(new JsBridge(), "JsBridge");
-		
 		webView.loadUrl("file:///android_asset/deviceSet.html"); 
 		
 	}
 	
 	private Device getDeviceById(int areaId,int deviceId){
-		List<Device> deviceList = DeviceListActivity.mDataList;
+		List<Device> deviceList = ((USRApplication)getApplicationContext()).deviceList;
 		for(Device device:deviceList){
 			if(device!=null&&device.getDeviceId()==deviceId&&device.getAreaId()==areaId){
 				return device;
@@ -125,7 +129,12 @@ public class DeviceSetActivity extends Activity {
 			Log.i("syj", postParams.toString());
 
 			String url = mUrl;
-			Map<String, String> map =  HttpUtil.getSign(DeviceSetActivity.this);
+			
+			SharedPreferences preferences = getSharedPreferences("set", 0);
+			String userStr = preferences.getString("user", "");
+			User user = JSON.parseObject(userStr, User.class);
+			Map<String, String> map =  HttpUtil.getSign(user);
+			
 			url = url + "?token=" + map.get("token")+"&timestamp="+map.get("timestamp")+"&sign="+map.get("sign");
 			
 			String content = HttpUtil.postUrl(url, postParams.toString());

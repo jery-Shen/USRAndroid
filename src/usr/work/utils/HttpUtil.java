@@ -73,11 +73,8 @@ public class HttpUtil {
 		return buffer.toString();
 	}
 	
-	public static Map<String, String> getSign(Context context){
+	public static Map<String, String> getSign(User user){
 		HashMap<String, String>  map = new HashMap<String, String>();
-		SharedPreferences preferences = context.getSharedPreferences("set", 0);
-		String userStr = preferences.getString("user", "");
-		User user = JSON.parseObject(userStr, User.class);
 		String token = user.getUserName();
 		String timestamp = System.currentTimeMillis()/1000 + "";
 		String sign = Md5.encrypt(token + "USR" + timestamp);

@@ -22,18 +22,17 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
+import usr.work.application.USRApplication;
 import usr.work.bean.Device;
 import usr.work.utils.HttpUtil;
 
 public class DeviceDetailActivity extends Activity {
 
 	
-	ImageView rightBtn;
-	
-	String url = HttpUtil.URL_PRE+"GetDeviceDetail";
-	
-	WebView webView;
+	private ImageView rightBtn;
+	private WebView webView;
 	private TextView top_title;
+	
 	private Device device;
 	private int areaId;
 	private int deviceId;
@@ -115,7 +114,7 @@ public class DeviceDetailActivity extends Activity {
 	}
 	
 	private Device getDeviceById(int areaId, int deviceId){
-		List<Device> deviceList = DeviceListActivity.mDataList;
+		List<Device> deviceList = ((USRApplication)getApplicationContext()).deviceList;
 		for(Device device:deviceList){
 			if(device!=null&&device.getDeviceId()==deviceId&&device.getAreaId()==areaId){
 				return device;

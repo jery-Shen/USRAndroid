@@ -33,7 +33,7 @@ public class LoginActivity extends Activity{
     private EditText mUserPwd;
     private ProgressBar loading;
     
-    String mUrl = HttpUtil.URL_PRE+"Login";
+    private String mUrl = HttpUtil.URL_PRE+"Login";
     
 
     @Override
@@ -42,7 +42,7 @@ public class LoginActivity extends Activity{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
         
-        findViewById(R.id.right_btn).setVisibility(View.GONE);
+        
 		top_title = (TextView) findViewById(R.id.top_title);
 		top_title.setText("登录");
 

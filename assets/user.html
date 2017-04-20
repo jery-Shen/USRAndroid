@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="css/weui.min.css">
 <style type="text/css">
 body {
-	background: #eee;
+	background: #f8f8f8;
 }
 
 </style>
@@ -89,7 +89,7 @@ body {
 	<script src="js/vue-resource.min.js"></script>
 <script type="text/javascript">
 function onData(data){
-	
+	app.user = JSON.parse(data);
 }
 var app = new Vue({
 
@@ -101,8 +101,11 @@ var app = new Vue({
 		user : {}
 	},
 	methods:{
+		save:function(){
+			
+		},
 		updatePwd:function(){
-			alert('updatePwd');
+			window.JsBridge.updatePwd();
 		}
 	}
 }).$mount('#app');

@@ -1,17 +1,12 @@
 package usr.work;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,7 +16,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,75 +32,50 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import usr.work.application.USRApplication;
 import usr.work.bean.Device;
-import usr.work.bean.User;
-import usr.work.utils.HttpUtil;
+import usr.work.service.OnlineService;
 import usr.work.utils.ViewUtil;
 
 public class DeviceListActivity extends Activity {
 
 	ListView listView;
-	public static User user;
-	public static List<Device> mDataList;
+	
+	public List<Device> mDataList;
+	
 	private PopupWindow popupwindow;
-	int areaId;
 	private ProgressBar loading;
-	ImageView rightBtn;
-	String mUrl = HttpUtil.URL_PRE+"GetDeviceList";
+	private ImageView rightBtn;
+
+	private MyAdapter myAdapter;
+	
+	private long firstExitTime;
 	
 	DecimalFormat df = new DecimalFormat("#.00");
-	private final Timer timer = new Timer();
+	private final Timer timer = new Timer();;
 	private TimerTask task = new TimerTask() {  
 	    @Override  
 	    public void run() {  
-	    	String url = mUrl;
-	    	Map<String, String> map =  HttpUtil.getSign(DeviceListActivity.this);
-	    	if(user.getAreaId()>0){
-	    		url = url + "?areaId="+user.getAreaId();
-	    		url = url + "&token=" + map.get("token")+"&timestamp="+map.get("timestamp")+"&sign="+map.get("sign");
-	    	}else{
-	    		url = url + "?token=" + map.get("token")+"&timestamp="+map.get("timestamp")+"&sign="+map.get("sign");
-	    	}
-
-	    	String content = HttpUtil.getStrFromUrl(url);
-
-	    	if(!content.equals("")){
-	    		JSONObject jsonObject =  JSON.parseObject(content);
-	    		if(jsonObject.getIntValue("status")==200){
-	    			JSONArray jDevices = jsonObject.getJSONArray("result");
-			    	mDataList.clear();
-			    	for(int i=0;i<jDevices.size();i++){
-			    		Device device = jDevices.getObject(i, Device.class);
-			    		if(device.getOnline()==1){
-			    			mDataList.add(device);
-			    		}
-			    	}
-			        Message message = new Message();  
-			        message.what = 6;  
-			        handler.sendMessage(message);  
-	    		}else{
-	    			Log.i("syj", jsonObject.getString("error"));
-	    		}
-	    	}else{
-	    		Message message = new Message();  
-		        message.what = 11;  
-		        handler.sendMessage(message); 
-	    	}
-	    }  
+	    	
+	    	Message message = new Message();
+	    	message.what = 6;
+	    	handler.sendMessage(message);
+	    }
 	}; 
-	
 	
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.what==6){
+				mDataList = ((USRApplication)getApplicationContext()).deviceList;
 				if(mDataList!=null&&mDataList.size()>0){
-					loading.setVisibility(View.INVISIBLE);
-					listView.setAdapter(new MyAdapter(DeviceListActivity.this, R.id.listview, mDataList));
+					if(myAdapter==null){
+						myAdapter = new MyAdapter(DeviceListActivity.this, R.id.listview, mDataList);
+						listView.setAdapter(myAdapter);
+						loading.setVisibility(View.INVISIBLE);
+					}else{
+						myAdapter.notifyDataSetChanged();
+					}
 				}
-				
-
-			}else if(msg.what==11){
-				//Toast.makeText(DeviceListActivity.this, "网络连接错误",Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
@@ -122,9 +91,6 @@ public class DeviceListActivity extends Activity {
 		rightBtn = (ImageView) findViewById(R.id.right_btn);
 		rightBtn.setVisibility(View.VISIBLE);
 		rightBtn.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.wv_menu));
-		SharedPreferences preferences = getSharedPreferences("set", 0);
-		String userStr = preferences.getString("user", "");
-		user = JSON.parseObject(userStr, User.class);
 		
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -151,12 +117,13 @@ public class DeviceListActivity extends Activity {
 			}
 		});
 		
-		mDataList = new ArrayList<Device>();
-		
-		timer.schedule(task, 0, 20000);
-		
-		
+		startService(new Intent(this, OnlineService.class));
+
+		timer.schedule(task, 1000, 2000);
 	}
+	
+	
+
 	
 	
 	private void initMenu() {
@@ -178,32 +145,28 @@ public class DeviceListActivity extends Activity {
 			
 			@Override
 			public void onClick(View arg0) {
-				Toast.makeText(DeviceListActivity.this, "开发中", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(DeviceListActivity.this, "开发中", Toast.LENGTH_SHORT).show();
 				popupwindow.dismiss();
-				
+				DeviceListActivity.this.finish();
 			}
 		});
 		popup_layout.findViewById(R.id.refresh).setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
-				Toast.makeText(DeviceListActivity.this, "开发中", Toast.LENGTH_SHORT).show();
 				popupwindow.dismiss();
-				
+				myAdapter = null;
+				loading.setVisibility(View.VISIBLE);
 			}
 		});
-		popup_layout.findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
+		popup_layout.findViewById(R.id.set).setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
-				SharedPreferences preferences = getSharedPreferences("set", 0);
-				Editor editor = preferences.edit();
-				editor.putString("user", "");
-				editor.commit();
 				popupwindow.dismiss();
-				Intent intent = new Intent(DeviceListActivity.this, LoginActivity.class);
-				startActivity(intent);
-				DeviceListActivity.this.finish();
+				
+				Intent intent = new Intent(DeviceListActivity.this, SetActivity.class);
+				startActivityForResult(intent, 1);
 			}
 		});
 		
@@ -211,8 +174,43 @@ public class DeviceListActivity extends Activity {
 	}
 	
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(resultCode==9){
+			Intent intent = new Intent(DeviceListActivity.this, LoginActivity.class);
+			startActivity(intent);
+			DeviceListActivity.this.finish();
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	@Override
+	public void onBackPressed() {// 覆盖返回键
+		long curTime = System.currentTimeMillis();
+		if (curTime - firstExitTime < 1000) {// 两次按返回键的时间小于2秒就退出应用
+			finish();
+		} else {
+			Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+			firstExitTime = curTime;
+		}
+		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+	}
+	
+	
+	
+	@Override
 	protected void onDestroy() {
 		timer.cancel();
+		stopService(new Intent(this, OnlineService.class));
 		super.onDestroy();
 	}
 	

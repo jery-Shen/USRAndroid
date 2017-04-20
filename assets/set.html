@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="css/weui.min.css">
 <style type="text/css">
 body {
-	background: #eee;
+	background: #f8f8f8;
 }
 
 
@@ -21,30 +21,30 @@ body {
 	<div id="app">
 
 		<div class="weui-cells">
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+            <a class="weui-cell weui-cell_access" href="javascript:;" @click="userInfo()">
                 <div class="weui-cell__bd">
                     <p>用户信息</p>
                 </div>
-                <div class="weui-cell__ft">tom</div>
+                <div class="weui-cell__ft">{{user.userName}}</div>
             </a>
             
         </div>
 
         <div class="weui-cells">
-        	<div class="weui-cell">
+        	<div class="weui-cell" @click="updateHost()">
                 <div class="weui-cell__bd">
                     <p>更新设备</p>
                 </div>
                 <div class="weui-cell__ft">更新</div>
             </div>
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+            <a class="weui-cell weui-cell_access" href="javascript:;" @click="help()">
                 <div class="weui-cell__bd">
                     <p>帮助系统</p>
                 </div>
                 <div class="weui-cell__ft">
                 </div>
             </a>
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+            <a class="weui-cell weui-cell_access" href="javascript:;" @click="about()">
                 <div class="weui-cell__bd">
                     <p>关于我们</p>
                 </div>
@@ -75,32 +75,32 @@ body {
 	<script src="js/vue-resource.min.js"></script>
 <script type="text/javascript">
 function onData(data){
-	
+	app.user = JSON.parse(data);
 }
 var app = new Vue({
 
 	created : function() {
 		var that = this;
-        //this.device = formatDevice(JSON.parse(dataStr));
+        
 	},
 	data : {
-		
+		user:{}
 	},
 	methods:{
-		user:function(){
-			alert('user');
+		userInfo:function(){
+			window.JsBridge.userInfo();
 		},
-		update:function(){
-			alert('update');
+		updateHost:function(){
+			window.JsBridge.updateHost();
 		},
 		about:function(){
-			alert('about');
+			window.JsBridge.about();
 		},
 		help:function(){
-			alert('help');
+			window.JsBridge.help();
 		},
 		logout:function(){
-			alert('logout');
+			window.JsBridge.logout();
 		}
 	}
 }).$mount('#app');

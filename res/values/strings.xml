@@ -13,5 +13,7 @@
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_web">WebActivity</string>
+    <string name="title_activity_update_pwd">UpdatePwdActivity</string>
 
 </resources>
