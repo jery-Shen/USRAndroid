@@ -69,7 +69,7 @@ body {
 
 		<div class="weui-cells">
            
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+            <a class="weui-cell weui-cell_access" href="javascript:;" @click="updatePwd()">
                 <div class="weui-cell__bd">
                     <p>修改密码</p>
                 </div>
@@ -88,7 +88,24 @@ body {
 	<script src="js/vue.min.js"></script>
 	<script src="js/vue-resource.min.js"></script>
 <script type="text/javascript">
+function onData(data){
+	
+}
+var app = new Vue({
 
+	created : function() {
+		var that = this;
+        //this.device = formatDevice(JSON.parse(dataStr));
+	},
+	data : {
+		user : {}
+	},
+	methods:{
+		updatePwd:function(){
+			alert('updatePwd');
+		}
+	}
+}).$mount('#app');
 
 </script>
 </body>
