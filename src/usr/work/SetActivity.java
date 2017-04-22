@@ -1,11 +1,16 @@
 package usr.work;
 
+import java.util.Map;
+
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,15 +18,20 @@ import android.view.Window;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import usr.work.bean.User;
+import usr.work.utils.HttpUtil;
 
 public class SetActivity extends Activity {
 
 	private WebView webView;
 	private TextView top_title;
-	
+	private ProgressBar loading;
 	private User user;
+	
+	private String mUrl = HttpUtil.URL_PRE+"GetHostList";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +46,7 @@ public class SetActivity extends Activity {
 		top_title = (TextView) findViewById(R.id.top_title);
 		top_title.setText("设置");
 		backBtn();
-		
+		loading = (ProgressBar) findViewById(R.id.loading);
 		webView = (WebView) findViewById(R.id.webview);
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -79,7 +89,12 @@ public class SetActivity extends Activity {
 		
 		@JavascriptInterface
 		public void updateHost(){
-           
+           runOnUiThread(new Runnable() {
+			public void run() {
+				loading.setVisibility(View.VISIBLE);
+				new GetDataTask().execute(user.getAreaId()+"");
+			}
+		});
         }
 		
 		@JavascriptInterface
@@ -107,5 +122,42 @@ public class SetActivity extends Activity {
 			setResult(9);
 			SetActivity.this.finish();
         }
+	}
+	
+	private class GetDataTask extends AsyncTask<String, Integer, String>{
+		@Override
+		protected String doInBackground(String... params) {
+			String areaId = params[0];
+			String url = mUrl+"?areaId="+areaId;
+			SharedPreferences preferences = getSharedPreferences("set", 0);
+			String userStr = preferences.getString("user", "");
+			User user = JSON.parseObject(userStr, User.class);
+			Map<String, String> map =  HttpUtil.getSign(user);
+			url = url + "&token=" + map.get("token")+"&timestamp="+map.get("timestamp")+"&sign="+map.get("sign");
+			String content = HttpUtil.getStrFromUrl(url);
+			return content;
+		}
+		
+		@Override
+		protected void onPostExecute(String content) {
+			loading.setVisibility(View.INVISIBLE);
+			if(!content.equals("")){
+				JSONObject jsonObject = JSON.parseObject(content);
+				if(jsonObject.getIntValue("status")==200){
+					JSONArray jHostList = jsonObject.getJSONArray("result");
+					SharedPreferences preferences = getSharedPreferences("set", 0);
+					Editor editor = preferences.edit();
+					editor.putString("hostList", jHostList.toJSONString());
+					editor.commit();
+					Toast.makeText(SetActivity.this, "更新成功",Toast.LENGTH_SHORT).show();
+				}else{
+					Toast.makeText(SetActivity.this, jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
+					
+				}
+			}else{
+				Toast.makeText(SetActivity.this, "网络连接错误",Toast.LENGTH_SHORT).show();
+			}
+			
+		}
 	}
 }

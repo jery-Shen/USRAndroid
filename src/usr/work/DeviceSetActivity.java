@@ -120,14 +120,12 @@ public class DeviceSetActivity extends Activity {
 			String paramsStr = params[0];
 			Map<String, Object> paramMap = JSON.parseObject(paramsStr,new TypeReference<Map<String, Object>>(){} );
 			StringBuffer postParams = new StringBuffer();
-			String timestamp = System.currentTimeMillis()/1000+"";
 			for (Map.Entry<String, Object> entry : paramMap.entrySet()) {  
 				postParams.append(entry.getKey() + "=" + entry.getValue());  
 				postParams.append("&");  
 		    } 
-			postParams.append("timestamp="+timestamp);
-			Log.i("syj", postParams.toString());
-
+			postParams.append("t="+1);
+		
 			String url = mUrl;
 			
 			SharedPreferences preferences = getSharedPreferences("set", 0);
