@@ -12,6 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" 
+            android:layout_marginTop="700px"
             android:layout_below="@id/header"
 		    android:paddingBottom="16dp"
 		    android:paddingLeft="16dp"
@@ -24,8 +25,9 @@
                 android:layout_height="50dp"
                 android:hint="用户名"
                 android:inputType="textEmailAddress"
+               
                 android:maxLines="1"
-                
+                android:paddingBottom="20dp"
                 android:singleLine="true" />
 
             <EditText
@@ -37,6 +39,7 @@
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
+                 android:paddingBottom="20dp"
                 android:singleLine="true" />
 
             <Button
@@ -44,7 +47,7 @@
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:paddingBottom="20dp"
                 android:text="登录"
                 android:background="#128bed"
                 android:textColor="#fff"
