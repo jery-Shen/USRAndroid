@@ -77,8 +77,10 @@ public class OnlineService extends Service{
     }  
       
     @Override  
-    public void onDestroy() {  
+    public void onDestroy() { 
         timer.cancel();
+        super.onDestroy();
+        ((USRApplication)getApplicationContext()).deviceList.clear();
     }  
 	
 	@Override

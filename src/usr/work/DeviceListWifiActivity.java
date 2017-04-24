@@ -32,9 +32,10 @@ import android.widget.Toast;
 import usr.work.application.USRApplication;
 import usr.work.bean.Device;
 import usr.work.service.OnlineService;
+import usr.work.service.WifiService;
 import usr.work.utils.ViewUtil;
 
-public class DeviceListActivity extends Activity {
+public class DeviceListWifiActivity extends Activity {
 
 	ListView listView;
 	
@@ -66,7 +67,7 @@ public class DeviceListActivity extends Activity {
 				mDataList = ((USRApplication)getApplicationContext()).deviceList;
 				if(mDataList!=null&&mDataList.size()>0){
 					if(myAdapter==null){
-						myAdapter = new MyAdapter(DeviceListActivity.this, R.id.listview, mDataList);
+						myAdapter = new MyAdapter(DeviceListWifiActivity.this, R.id.listview, mDataList);
 						listView.setAdapter(myAdapter);
 						loading.setVisibility(View.INVISIBLE);
 					}else{
@@ -93,7 +94,7 @@ public class DeviceListActivity extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				Intent intent = new Intent(DeviceListActivity.this,DeviceDetailActivity.class);
+				Intent intent = new Intent(DeviceListWifiActivity.this,DeviceDetailActivity.class);
 				Device info = mDataList.get(position);
 				intent.putExtra("areaId",info.getAreaId());
 				intent.putExtra("deviceId",info.getDeviceId());
@@ -114,7 +115,7 @@ public class DeviceListActivity extends Activity {
 			}
 		});
 		
-		startService(new Intent(this, OnlineService.class));
+		startService(new Intent(this, WifiService.class));
 
 		timer.schedule(task, 1000, 2000);
 	}
@@ -125,7 +126,7 @@ public class DeviceListActivity extends Activity {
 	
 	private void initMenu() {
 		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-		RelativeLayout popup_layout = (RelativeLayout) inflater.inflate(R.layout.popup_online_menu, null);
+		RelativeLayout popup_layout = (RelativeLayout) inflater.inflate(R.layout.popup_wifi_menu, null);
 
 		popupwindow = new PopupWindow(popup_layout, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		popup_layout.setOnTouchListener(new OnTouchListener() {
@@ -144,9 +145,9 @@ public class DeviceListActivity extends Activity {
 			public void onClick(View arg0) {
 				//Toast.makeText(DeviceListActivity.this, "开发中", Toast.LENGTH_SHORT).show();
 				popupwindow.dismiss();
-				Intent intent = new Intent(DeviceListActivity.this,DeviceListWifiActivity.class);
+				Intent intent = new Intent(DeviceListWifiActivity.this,DeviceListActivity.class);
 	            startActivity(intent);
-				DeviceListActivity.this.finish();
+				DeviceListWifiActivity.this.finish();
 			}
 		});
 		popup_layout.findViewById(R.id.refresh).setOnClickListener(new View.OnClickListener() {
@@ -163,7 +164,7 @@ public class DeviceListActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				popupwindow.dismiss();
-				Intent intent = new Intent(DeviceListActivity.this,WebActivity.class);
+				Intent intent = new Intent(DeviceListWifiActivity.this,WebActivity.class);
 	            intent.putExtra("title", "帮助系统");
 	            intent.putExtra("url", "file:///android_asset/instructe.html");
 	            startActivity(intent);
@@ -175,7 +176,7 @@ public class DeviceListActivity extends Activity {
 			public void onClick(View arg0) {
 				popupwindow.dismiss();
 				
-				Intent intent = new Intent(DeviceListActivity.this, SetActivity.class);
+				Intent intent = new Intent(DeviceListWifiActivity.this, SetActivity.class);
 				startActivityForResult(intent, 1);
 			}
 		});
@@ -186,9 +187,9 @@ public class DeviceListActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode==9){
-			Intent intent = new Intent(DeviceListActivity.this, LoginActivity.class);
+			Intent intent = new Intent(DeviceListWifiActivity.this, LoginActivity.class);
 			startActivity(intent);
-			DeviceListActivity.this.finish();
+			DeviceListWifiActivity.this.finish();
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -220,7 +221,7 @@ public class DeviceListActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		timer.cancel();
-		stopService(new Intent(this, OnlineService.class));
+		stopService(new Intent(this, WifiService.class));
 		super.onDestroy();
 	}
 	
