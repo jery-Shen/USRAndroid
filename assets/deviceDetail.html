@@ -20,10 +20,11 @@ body{
     text-align: center;
 }
 .head .logo img{
-    width: 80px;
+    width: 65px;
 }
 .infoBar{
 	height:42px;
+	margin-top:15px;
     text-align: center;
     width: 100%;
     font-weight: bolder;
@@ -41,6 +42,7 @@ body{
     width: 100%;
     padding: 5px 0px;
     border-bottom: solid 1px #ddd;
+    background: #fff;
 }
 .nav-tab:after{
     content:".";display:block;height:0;clear:both;visibility:hidden
@@ -92,6 +94,7 @@ body{
     border-top: solid 1px #ddd;
     border-bottom: solid 1px #ddd;
     margin-top: 10px;
+    background: #fff;
 }
 
 .list{
@@ -168,7 +171,7 @@ body{
 
 <div id="app">
     <div class="head">
-        <p class="logo"><img src="img/logo.png"></p>
+        <p class="logo"><img src="img/logo_white.png"></p>
         <div class="infoBar">{{device.infoBarStr}}</div>
         
         
@@ -185,7 +188,7 @@ body{
     <div class="tabs">
         <div v-show="currentView=='base'" class="base">
             <div class="wrape">
-                <div id="myChart" class="chart" style="height: 250px;width: 100%;" v-chart="myChart"></div>
+                <div id="myChart" class="chart" style="height: 180px;width: 100%;" v-chart="myChart"></div>
             </div>
             <div class="list">
                  <div class="list-body">
@@ -284,11 +287,9 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
             setTimeout(function() {
                 that.myChart = echarts.init(document.getElementById('myChart'));
                 that.drawChart()
-            }, 100);
+            }, 500);
             
-            setTimeout(function() {
-                that.device.temp = 188;
-            }, 2000);
+            
         },
         data: {
             currentView: 'base',
@@ -312,18 +313,18 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
             drawChart:function(){
 
                 var option = {
-                    tooltip: {
+                    /* tooltip: {
                         trigger: 'axis',
                         axisPointer: {
                             type: 'shadow'
                         }
-                    },
+                    }, */
                     color:['#128bed'],
                     grid: {
                         top : '2%',
                         left: '-48px',
-                        right: '4%',
-                        bottom: '-2%',
+                        right: '8%',
+                        bottom: '-10%',
                         containLabel: true
                     },
                     xAxis: {

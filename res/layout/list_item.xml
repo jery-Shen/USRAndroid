@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+   
     android:background="#ffffff" >
 
     <RelativeLayout
@@ -9,60 +10,63 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:background="#fff" >
+        
+        <ImageView
+	        android:id="@+id/image"
+	        android:src="@drawable/logo_blue"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"/>
+        
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
-            
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/image"
             android:gravity="center"
             android:text="111"
             android:textColor="#000" 
             android:textSize="16dp"/>
-        <ImageView
-        android:id="@+id/image"
-        android:src="@drawable/logo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/title"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="5dp"/>
         
-        
-        
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:text="2015-12-12"
-            android:textColor="#aaa" />
-        
-        
-
         <TextView
             android:id="@+id/info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/image"
-            android:layout_marginTop="6dp"
-            android:text="状态"
-            android:textColor="#aaa"
+            android:layout_toRightOf="@id/title"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="3dp"
+            android:text="通讯故障"
+            android:textColor="#f00"
+            android:background="@drawable/layer_border_success"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
             android:textStyle="bold"
-            android:textSize="20dp" />
+            android:textSize="10dp" />
         
+        
+         <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="2015-12-12"
+            android:textSize="12dp"
+            android:textColor="#aaa" />
+        
+
         <TextView
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/info"
-            android:layout_marginTop="6dp"
+            android:layout_below="@id/title"
+            android:layout_marginTop="20dp"
             android:text="内容"
             android:textColor="#666"
             android:textSize="13dp" />
@@ -77,6 +81,8 @@
             android:text="换气次数：15  进风速度：30"
             android:textColor="#666"
             android:textSize="13dp" />
+        
+       
 
         
     </RelativeLayout>

@@ -253,14 +253,17 @@ public class DeviceListActivity extends Activity {
 			holder.info.setText(stringOfInfoBar(infoBar));
 			if(infoBar==0){
 				holder.info.setTextColor(Color.parseColor("#cccccc"));
+				holder.info.setBackground(getResources().getDrawable(R.drawable.layer_border_disable));
 			}else if(infoBar==1){
 				holder.info.setTextColor(Color.parseColor("#1aad19"));
+				holder.info.setBackground(getResources().getDrawable(R.drawable.layer_border_success));
 			}else{
 				holder.info.setTextColor(Color.parseColor("#e64340"));
+				holder.info.setBackground(getResources().getDrawable(R.drawable.layer_border_warn));
 			}
 			holder.title.setText("设备"+info.getDeviceId());
 			holder.content.setText("温度:"+info.getTemp()+"，湿度:"+info.getHr()+"，压差:"+info.getDp());
-			holder.des.setText("换气期数:"+info.getAirCount()+"，进风速度:"+df.format(info.getInWindSpeed()/100)+"，目标压差:"+info.getDpTarget()+"，控制模式:"+(info.getWorkMode()==0?"手动":"自动"));
+			holder.des.setText("换气期数:"+info.getAirCount()+"，进风速度:"+df.format(info.getInWindSpeed()/100)+"，目标压差:"+info.getDpTarget());
 			holder.time.setText(info.getUpdateTime());
 			return row;
 		}
