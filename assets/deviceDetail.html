@@ -183,9 +183,9 @@ body{
     </div>
 
     <div class="tabs">
-        <div v-if="currentView=='base'" class="base">
+        <div v-show="currentView=='base'" class="base">
             <div class="wrape">
-                <div class="chart" style="height: 250px;width: 100%;" v-chart="myChart"></div>
+                <div id="myChart" class="chart" style="height: 250px;width: 100%;" v-chart="myChart"></div>
             </div>
             <div class="list">
                  <div class="list-body">
@@ -202,7 +202,7 @@ body{
            
         </div>
 
-        <div v-if="currentView=='sys'" class="sys">
+        <div v-show="currentView=='sys'" class="sys">
             
             <div class="list">
                 <div class="list-body">
@@ -210,7 +210,11 @@ body{
                     
                     <div class="item col1"><div class="data">正负压模式 <span>{{device.akpModeStr}}</span></div></div>
                     <div class="item col1"><div class="data">压差传感器型号 <span>{{device.converterModelStr}}</span></div></div>
+             </div>
+            </div>
 
+            <div class="list">
+                <div class="list-body">
                     <div class="item col2"><div class="data">变频器连续最高 <span>{{device.converterMax}}</span></div></div>
                     <div class="item col2"><div class="data">变频器连续最低 <span>{{device.converterMin}}</span></div></div>
 
@@ -227,7 +231,7 @@ body{
             
         </div>
 
-        <div v-if="currentView=='air'" class="air">
+        <div v-show="currentView=='air'" class="air">
             
             <div class="list">
                 <div class="list-body">
@@ -254,13 +258,6 @@ body{
         </div>
 
     </div>
-
-    
-
-    
-
-   
-
    
 </div>
 
@@ -284,9 +281,14 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
         created:function(){
         	var that = this;
             this.device = formatDevice(JSON.parse(dataStr));
-
-            //this.drawChart()
-
+            setTimeout(function() {
+                that.myChart = echarts.init(document.getElementById('myChart'));
+                that.drawChart()
+            }, 100);
+            
+            setTimeout(function() {
+                that.device.temp = 188;
+            }, 2000);
         },
         data: {
             currentView: 'base',
@@ -294,71 +296,74 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
             device:{},
             myChart:{}
         },
-        directives:{
-            chart:{
-              // 当绑定元素插入到 DOM 中。
-              bind: function(el, binding, vnode){
-                console.info(binding);
-                    //this.myChart = echarts.init(el)
-              }
-            }
+        watch:{
+            'device.temp':'valueChange',
+            'device.hr':'valueChange',
+            'device.dp':'valueChange',
+            'device.inWindSpeed':'valueChange',
+            'device.outWindSpeed':'valueChange'
         },
         methods:{
+            valueChange:function(newVal,oldVal){
+                if(oldVal){
+                    this.drawChart()
+                }
+            },
             drawChart:function(){
+
                 var option = {
-                    title: {
-                        text: '世界人口总量',
-                        subtext: '数据来自网络'
-                    },
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
                             type: 'shadow'
                         }
                     },
-                    color:['#f00','#128bed'],
-                    legend: {
-                        data: ['2011年', '2012年']
-                    },
+                    color:['#128bed'],
                     grid: {
-                        left: '3%',
+                        top : '2%',
+                        left: '-48px',
                         right: '4%',
-                        bottom: '3%',
+                        bottom: '-2%',
                         containLabel: true
                     },
                     xAxis: {
                         show:false,
-                        
                     },
                     yAxis: {
                         type: 'category',
+                        axisLine:{
+                            show:false
+                        },
                         axisTick: {
                             show: false
                         },
-                        data: ['巴西','印尼','美国','印度','中国','世界人口(万)']
+                        axisLabel:{
+                            margin:58,
+                            textStyle:{
+                                color:'#333',
+                                align:'left'
+                            },
+                        },
+                        data: ['出风风速','进风风速','压差','湿度','温度']
                     },
                     series: [{
-                            name: '2011年',
 
-                           barGap:'-100%',
                             type: 'bar',
-                            data: [19325, 23438, 31000, 121594, 134141, 681807]
-                        },
-                        {
-                            name: '2012年',
-                            type: 'bar',
+                            barWidth:20,
                             label:{
                                 normal:{
-                                show: true,
-                    
-                                position: 'insideRight'}
+                                    show: true,
+                                    position: 'right',
+                                    textStyle:{
+                                        color:'#333',
+                                    },
+                                }
                             },
-                            data: [18203, 23489, 29034, 104970, 131744, 630230]
-                        },
-                        
+                            data: [this.device.inWindSpeed, this.device.outWindSpeed, this.device.dp, this.device.hr, this.device.temp,]
+                        }
                     ]
                 };
-                this.mychart.setOption(option);
+                this.myChart.setOption(option);
             }
         }
 	}).$mount('#app');
