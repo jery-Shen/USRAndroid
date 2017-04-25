@@ -12,16 +12,24 @@ body{
 	background: #f8f8f8;
 }
 .head{
-    background: #128bed;
     color: #fff;
     padding: 15px 15px;
+    right: 0px;
+    left: 0px;
+    top: 0px;
+    position: fixed;
+    z-index: 999;
 }
+
 .head .logo{
     text-align: center;
 }
 .head .logo img{
     width: 65px;
 }
+
+
+
 .infoBar{
 	height:42px;
 	margin-top:15px;
@@ -43,6 +51,9 @@ body{
     padding: 5px 0px;
     border-bottom: solid 1px #ddd;
     background: #fff;
+    position: fixed;
+    top: 165px;
+    z-index: 999;
 }
 .nav-tab:after{
     content:".";display:block;height:0;clear:both;visibility:hidden
@@ -68,7 +79,7 @@ body{
     color: #128bed;
 }
 .tabs{
-    margin-top: 12px;
+    margin-top: 220px;
 }
 .common{
     margin-top: 20px;
@@ -149,6 +160,10 @@ body{
     width: 100%;
 }
 
+.text-primary{
+    color: #128bed; 
+}
+
 .text-success{
     color: #1aad19;
 }
@@ -158,6 +173,22 @@ body{
 }
 .text-disabled{
     color: #cccccc;
+}
+
+.bg-primary{
+    background: #128bed; 
+}
+
+.bg-warn{
+    background: #e64340; 
+}
+
+.bg-success{
+    background: #1aad19; 
+}
+
+.bg-disable{
+    background: #aaaaaa; 
 }
 
 
@@ -170,14 +201,10 @@ body{
 
 
 <div id="app">
-    <div class="head">
+    <div class="head" :class="headBg">
         <p class="logo"><img src="img/logo_white.png"></p>
         <div class="infoBar">{{device.infoBarStr}}</div>
-        
-        
         <div class="updateTime">{{device.updateTime}}</div>
-
-        
     </div>
     <div class="nav-tab">
         <a :class="{'active': currentView=='base'}" @click="currentView='base'">基本信息</a>
@@ -280,10 +307,16 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 		
 	}
 	var app = new Vue({
-
         created:function(){
         	var that = this;
             this.device = formatDevice(JSON.parse(dataStr));
+            if(this.device.infoBar==0){
+                this.headBg = 'bg-disable';
+            }else if(this.device.infoBar==1){
+                headBg = 'bg-primary';
+            }else{
+                this.headBg = 'bg-warn';
+            }
             setTimeout(function() {
                 that.myChart = echarts.init(document.getElementById('myChart'));
                 that.drawChart()
@@ -295,7 +328,8 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
             currentView: 'base',
             deviceId:1,
             device:{},
-            myChart:{}
+            myChart:{},
+            headBg:''
         },
         watch:{
             'device.temp':'valueChange',
@@ -311,14 +345,37 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
                 }
             },
             drawChart:function(){
-
+                var that = this;
                 var option = {
-                    /* tooltip: {
+                    tooltip: {
                         trigger: 'axis',
                         axisPointer: {
                             type: 'shadow'
+                        },
+                        formatter: function (params, ticket, callback) {
+                            if(params[0].axisValue=='温度'){
+                                return '当前温度：'+that.device.temp+'<br>'
+                                +'温度上限：'+that.device.tempUpLimit+'<br>'
+                                +'温度下限：'+that.device.tempDownLimit;
+                            }else if(params[0].axisValue=='湿度'){
+                                return '当前湿度：'+that.device.hr+'<br>'
+                                +'湿度上限：'+that.device.hrUpLimit+'<br>'
+                                +'湿度下限：'+that.device.hrDownLimit;
+                            }else if(params[0].axisValue=='压差'){
+                                return '当前压差：'+that.device.dp+'<br>'
+                                +'压差上限：'+that.device.dpUpLimit+'<br>'
+                                +'压差下限：'+that.device.dpDownLimit;
+                            }else if(params[0].axisValue=='进风风速'){
+                                return '进风风速：'+that.device.inWindSpeed;
+                            }else if(params[0].axisValue=='出风风速'){
+                                return '出风风速：'+that.device.outWindSpeed;
+                            }else{
+                                return '未知';
+                            }
+                            console.info(params[0].axisValue);
+                            
                         }
-                    }, */
+                    },
                     color:['#128bed'],
                     grid: {
                         top : '2%',
