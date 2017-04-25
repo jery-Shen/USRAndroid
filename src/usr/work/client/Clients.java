@@ -8,7 +8,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -225,6 +227,63 @@ public class Clients {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void sendUpdate(int deviceId,List<byte[]> sendQueue){
+		DeviceSocket deviceSocket = getDeviceSocket(deviceId);
+		if(deviceSocket!=null){
+			deviceSocket.setSending(true);
+			sleep();
+			for(byte[] bytes:sendQueue){
+				byte[] crcBytes = CRC.getCRC(bytes);
+				System.out.println(new Date().toLocaleString()+",deviceId:"+deviceId+",send:"+Hex.printHexString(crcBytes));
+				deviceSocket = getDeviceSocket(deviceId);
+				sendOne(crcBytes, deviceSocket);
+				sleep();
+			}
+			sleep();
+			deviceSocket.setSending(false);
+		}
+	}
+	
+	private DeviceSocket getDeviceSocket(int deviceId){
+		synchronized (dsockets) {
+			if (dsockets.size() > 0) {
+				for (DeviceSocket deviceSocket : dsockets) {	
+					if(deviceSocket.getDeviceId()==deviceId){
+						return deviceSocket;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	private void sleep(){
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateDevice(Map<String, Object> paramMap){
+		int deviceId = 0;
+		for (Map.Entry<String, Object> entry : paramMap.entrySet()) { 
+			if(entry.getKey().equals("deviceId")){
+				deviceId = Integer.parseInt(entry.getValue().toString());
+				break;
+			}
+		}
+		for (Map.Entry<String, Object> entry : paramMap.entrySet()) { 
+			List<byte[]> sendQueue = new ArrayList<byte[]>();
+			
+			if(!entry.getKey().equals("areaId")&&!!entry.getKey().equals("deviceId")){
+				Log.i("syj", deviceId+"");
+				Log.i("syj", entry.getKey() + "=" + entry.getValue());
+			}
+	    } 
 	}
 
 }

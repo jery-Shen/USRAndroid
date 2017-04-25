@@ -35,7 +35,6 @@ public class OnlineService extends Service{
 	    	}else{
 	    		url = url + "?token=" + map.get("token")+"&timestamp="+map.get("timestamp")+"&sign="+map.get("sign");
 	    	}
-
 	    	String content = HttpUtil.getStrFromUrl(url);
 	    	//Log.i("syj", content);
 	    	if(!content.equals("")){

@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -25,8 +26,8 @@ import android.widget.Toast;
 import usr.work.application.USRApplication;
 import usr.work.bean.Device;
 import usr.work.bean.User;
+import usr.work.client.Clients;
 import usr.work.utils.HttpUtil;
-import usr.work.utils.Md5;
 
 public class DeviceSetActivity extends Activity {
 
@@ -164,6 +165,24 @@ public class DeviceSetActivity extends Activity {
 		}
 	}
 	
+	private class UpdateDeviceWifiTask extends AsyncTask<String, Integer, String>{
+		@Override
+		protected String doInBackground(String... params) {
+			String paramsStr = params[0];
+			Map<String, Object> paramMap = JSON.parseObject(paramsStr,new TypeReference<Map<String, Object>>(){} );
+			Clients.getInstance().updateDevice(paramMap);
+			return "";
+		}
+		
+		@Override
+		protected void onPostExecute(String content) {
+			loading.setVisibility(View.INVISIBLE);
+//			DeviceSetActivity.this.setResult(8);
+//			DeviceSetActivity.this.finish();
+			
+		}
+	}
+	
 	class JsBridge{
 		
 		@JavascriptInterface
@@ -173,7 +192,14 @@ public class DeviceSetActivity extends Activity {
 					loading.setVisibility(View.VISIBLE);
 				}
 			});
-			new UpdateDeviceTask().execute(paramsStr);
+			SharedPreferences preferences = getSharedPreferences("set", 0);
+			int  mode = preferences.getInt("mode", 0);
+			if(mode==0){
+				new UpdateDeviceTask().execute(paramsStr);
+			}else{
+				new UpdateDeviceWifiTask().execute(paramsStr);
+			}
+			
 				
         }
 		
