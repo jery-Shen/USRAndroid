@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.alibaba.fastjson.JSON;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,6 +35,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import usr.work.application.USRApplication;
 import usr.work.bean.Device;
+import usr.work.bean.Host;
+import usr.work.bean.User;
+import usr.work.client.Clients;
 import usr.work.service.OnlineService;
 import usr.work.service.WifiService;
 import usr.work.utils.ViewUtil;
@@ -98,7 +105,6 @@ public class DeviceListWifiActivity extends Activity {
 				Device info = mDataList.get(position);
 				intent.putExtra("areaId",info.getAreaId());
 				intent.putExtra("deviceId",info.getDeviceId());
-				
 				startActivity(intent);
 			}
 		});
@@ -148,6 +154,10 @@ public class DeviceListWifiActivity extends Activity {
 				Intent intent = new Intent(DeviceListWifiActivity.this,DeviceListActivity.class);
 	            startActivity(intent);
 				DeviceListWifiActivity.this.finish();
+				SharedPreferences preferences = getSharedPreferences("set", 0);
+				Editor editor = preferences.edit();
+				editor.putInt("mode", 0);
+				editor.commit();
 			}
 		});
 		popup_layout.findViewById(R.id.refresh).setOnClickListener(new View.OnClickListener() {
@@ -157,6 +167,11 @@ public class DeviceListWifiActivity extends Activity {
 				popupwindow.dismiss();
 				myAdapter = null;
 				loading.setVisibility(View.VISIBLE);
+				SharedPreferences preferences = getSharedPreferences("set", 0);
+				String hostListStr = preferences.getString("hostList", "[]");
+				List<Host> hostList = JSON.parseArray(hostListStr, Host.class);
+				Clients.getInstance().setHostList(hostList);
+				Clients.getInstance().scanAndConnect();
 			}
 		});
 		popup_layout.findViewById(R.id.instructe).setOnClickListener(new View.OnClickListener() {

@@ -25,7 +25,14 @@ public class SplashActivity extends Activity {
 			new Handler().postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					Intent intent = new Intent(SplashActivity.this, DeviceListActivity.class);
+					SharedPreferences preferences = getSharedPreferences("set", 0);
+					int  mode = preferences.getInt("mode", 0);
+					Intent intent = null;
+					if(mode==0){
+						intent = new Intent(SplashActivity.this, DeviceListActivity.class);
+					}else{
+						intent = new Intent(SplashActivity.this, DeviceListWifiActivity.class);
+					}
 					startActivity(intent);
 					SplashActivity.this.finish();
 				}

@@ -37,10 +37,11 @@ public class OnlineService extends Service{
 	    	}
 
 	    	String content = HttpUtil.getStrFromUrl(url);
-
+	    	//Log.i("syj", content);
 	    	if(!content.equals("")){
 	    		JSONObject jsonObject =  JSON.parseObject(content);
 	    		if(jsonObject.getIntValue("status")==200){
+	    			
 	    			JSONArray jDevices = jsonObject.getJSONArray("result");
 	    			((USRApplication)getApplicationContext()).deviceList.clear();
 			    	for(int i=0;i<jDevices.size();i++){

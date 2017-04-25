@@ -150,6 +150,7 @@ public class SetActivity extends Activity {
 					editor.putString("hostList", jHostList.toJSONString());
 					editor.commit();
 					Toast.makeText(SetActivity.this, "更新成功",Toast.LENGTH_SHORT).show();
+					Log.i("syj", preferences.getString("hostList", "[]"));
 				}else{
 					Toast.makeText(SetActivity.this, jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
 					

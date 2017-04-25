@@ -8,6 +8,8 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -139,7 +141,6 @@ public class DeviceListActivity extends Activity {
 			}
 		});
 		popup_layout.findViewById(R.id.switch_mode).setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View arg0) {
 				//Toast.makeText(DeviceListActivity.this, "开发中", Toast.LENGTH_SHORT).show();
@@ -147,6 +148,10 @@ public class DeviceListActivity extends Activity {
 				Intent intent = new Intent(DeviceListActivity.this,DeviceListWifiActivity.class);
 	            startActivity(intent);
 				DeviceListActivity.this.finish();
+				SharedPreferences preferences = getSharedPreferences("set", 0);
+				Editor editor = preferences.edit();
+				editor.putInt("mode", 1);
+				editor.commit();
 			}
 		});
 		popup_layout.findViewById(R.id.refresh).setOnClickListener(new View.OnClickListener() {

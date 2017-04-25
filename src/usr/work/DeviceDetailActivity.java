@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -54,6 +55,7 @@ public class DeviceDetailActivity extends Activity {
 			if(msg.what==6){
 				if(device!=null){
 					device = getDeviceById(areaId,deviceId);
+					
 					webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
 				}
 				//Log.i("syj", JSON.toJSONString(device));
@@ -66,7 +68,6 @@ public class DeviceDetailActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_device_detail);
-		
 		rightBtn = (ImageView) findViewById(R.id.right_btn);
 		rightBtn.setVisibility(View.VISIBLE);
 		rightBtn.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.wv_edit_white));
@@ -77,6 +78,13 @@ public class DeviceDetailActivity extends Activity {
 		backBtn();
 		
 		device = getDeviceById(areaId,deviceId);
+		if(device.getInfoBar()==0){
+			findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#aaaaaa"));
+		}else if(device.getInfoBar()==1){
+			findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#128bed"));
+		}else{
+			findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#e64340"));
+		}
 		timer.schedule(task, 500, 1000);
 		
 		rightBtn.setOnClickListener(new View.OnClickListener() {

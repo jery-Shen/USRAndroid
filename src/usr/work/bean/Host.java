@@ -2,17 +2,11 @@ package usr.work.bean;
 
 public class Host {
 	private String ip;
+	private int areaId;
 	private int deviceId;
 	private String mac;
+	private String des;
 	
-	
-	
-	public Host(String ip, int deviceId, String mac) {
-		super();
-		this.ip = ip;
-		this.deviceId = deviceId;
-		this.mac = mac;
-	}
 	public String getIp() {
 		return ip;
 	}
@@ -40,4 +34,16 @@ public class Host {
         }
         return super.equals(obj);
     }
+	public int getAreaId() {
+		return areaId;
+	}
+	public void setAreaId(int areaId) {
+		this.areaId = areaId;
+	}
+	public String getDes() {
+		return des;
+	}
+	public void setDes(String des) {
+		this.des = des;
+	}
 }

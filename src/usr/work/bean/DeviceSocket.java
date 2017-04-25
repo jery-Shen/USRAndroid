@@ -9,6 +9,7 @@ public class DeviceSocket {
 	private Socket socket;
 	private DataOutputStream dataOut;
 	private Device device;
+	private boolean sending;
 	private int UnReceiveTime;
 	
 	public int getAreaId() {
@@ -46,6 +47,12 @@ public class DeviceSocket {
 	}
 	public void setUnReceiveTime(int unReceiveTime) {
 		UnReceiveTime = unReceiveTime;
+	}
+	public boolean isSending() {
+		return sending;
+	}
+	public void setSending(boolean sending) {
+		this.sending = sending;
 	}
 	
 	

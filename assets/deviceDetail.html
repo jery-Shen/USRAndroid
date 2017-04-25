@@ -300,7 +300,7 @@ body{
 <script src="js/vue-resource.min.js"></script>
 <script src="js/echarts.min.js"></script>
 <script type="text/javascript">
-var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1700,"airSpeed16":1800,"airSpeed18":1900,"airSpeed20":2000,"airSpeed22":2100,"airSpeed24":2200,"airSpeed26":2300,"airSpeed28":2400,"airSpeed30":2500,"airSpeed35":2600,"airSpeed40":2800,"airSpeed45":3000,"airSpeed50":3500,"akpMode":0,"alarmCycle":16,"areaId":0,"communicateFalse":5061,"communicateTrue":0,"converterMax":0,"converterMin":5,"converterModel":1,"cycleError":1,"deviceId":2,"dp":125,"dpAlarmClose":0,"dpDownLimit":0,"dpOff":0,"dpReally":165,"dpTarget":20,"dpUpLimit":125,"hr":63,"hrAlarmClose":0,"hrDownLimit":0,"hrOff":0,"hrReally":63,"hrUpLimit":88,"iD":0,"inWindAlarmClose":0,"inWindSpeed":4100,"infoBar":10,"online":1,"outWindSpeed":2200,"stateSwitch":2,"temp":15,"tempAlarmClose":0,"tempDownLimit":0,"tempOff":0,"tempReally":15,"tempUpLimit":25,"updateTime":"2017年4月2日 下午4:54:10","workHour":10,"workMode":0,"workSecond":980}';
+var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1700,"airSpeed16":1800,"airSpeed18":1900,"airSpeed20":2000,"airSpeed22":2100,"airSpeed24":2200,"airSpeed26":2300,"airSpeed28":2400,"airSpeed30":2500,"airSpeed35":2600,"airSpeed40":2800,"airSpeed45":3000,"airSpeed50":3500,"akpMode":0,"alarmCycle":16,"areaId":0,"communicateFalse":5061,"communicateTrue":0,"converterMax":0,"converterMin":5,"converterModel":1,"cycleError":1,"deviceId":2,"dp":125,"dpAlarmClose":0,"dpDownLimit":0,"dpOff":0,"dpReally":165,"dpTarget":20,"dpUpLimit":125,"hr":63,"hrAlarmClose":0,"hrDownLimit":0,"hrOff":0,"hrReally":63,"hrUpLimit":88,"iD":0,"inWindAlarmClose":0,"inWindSpeed":4100,"infoBar":1,"online":1,"outWindSpeed":2200,"stateSwitch":2,"temp":15,"tempAlarmClose":0,"tempDownLimit":0,"tempOff":0,"tempReally":15,"tempUpLimit":25,"updateTime":"2017年4月2日 下午4:54:10","workHour":10,"workMode":0,"workSecond":980}';
 
 	function onData(data){
         app.device = formatDevice(JSON.parse(data));
@@ -309,14 +309,9 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 	var app = new Vue({
         created:function(){
         	var that = this;
-            this.device = formatDevice(JSON.parse(dataStr));
-            if(this.device.infoBar==0){
-                this.headBg = 'bg-disable';
-            }else if(this.device.infoBar==1){
-                headBg = 'bg-primary';
-            }else{
-                this.headBg = 'bg-warn';
-            }
+            //this.device = formatDevice(JSON.parse(dataStr));
+          
+            
             setTimeout(function() {
                 that.myChart = echarts.init(document.getElementById('myChart'));
                 that.drawChart()
@@ -336,7 +331,16 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
             'device.hr':'valueChange',
             'device.dp':'valueChange',
             'device.inWindSpeed':'valueChange',
-            'device.outWindSpeed':'valueChange'
+            'device.outWindSpeed':'valueChange',
+            'device.infoBar':function(newVal,oldVal){
+            	if(newVal==0){
+                    this.headBg = 'bg-disable';
+                }else if(newVal==1){
+                    this.headBg = 'bg-primary';
+                }else{
+                    this.headBg = 'bg-warn';
+                }
+            }
         },
         methods:{
             valueChange:function(newVal,oldVal){
