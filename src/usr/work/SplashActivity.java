@@ -3,9 +3,12 @@ package usr.work;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Window;
+import usr.work.utils.NetUtil;
 
 public class SplashActivity extends Activity {
 

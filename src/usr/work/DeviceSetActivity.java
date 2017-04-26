@@ -28,6 +28,7 @@ import usr.work.bean.Device;
 import usr.work.bean.User;
 import usr.work.client.Clients;
 import usr.work.utils.HttpUtil;
+import usr.work.utils.NetUtil;
 
 public class DeviceSetActivity extends Activity {
 
@@ -170,15 +171,26 @@ public class DeviceSetActivity extends Activity {
 		protected String doInBackground(String... params) {
 			String paramsStr = params[0];
 			Map<String, Object> paramMap = JSON.parseObject(paramsStr,new TypeReference<Map<String, Object>>(){} );
-			Clients.getInstance().updateDevice(paramMap);
-			return "";
+			String res = "";
+			if(NetUtil.isServerAvailable()){
+				res = "系统检测到设备在联网模式下传输数据，请切换联网模式后再修改设备参数";
+			}else if(!Clients.getInstance().updateDevice(deviceId,paramMap)){
+				res = "设备正在被其他终端操控，请关闭其他终端后再修改";
+			}
+			
+			return res;
 		}
 		
 		@Override
 		protected void onPostExecute(String content) {
 			loading.setVisibility(View.INVISIBLE);
-//			DeviceSetActivity.this.setResult(8);
-//			DeviceSetActivity.this.finish();
+			if(!content.equals("")){
+				Toast.makeText(DeviceSetActivity.this, content,Toast.LENGTH_SHORT).show();
+			}else{
+				DeviceSetActivity.this.setResult(8);
+				DeviceSetActivity.this.finish();
+			}
+
 			
 		}
 	}

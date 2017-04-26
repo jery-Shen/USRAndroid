@@ -14,9 +14,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.wifi.WifiInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +42,7 @@ import usr.work.bean.User;
 import usr.work.client.Clients;
 import usr.work.service.OnlineService;
 import usr.work.service.WifiService;
+import usr.work.utils.NetUtil;
 import usr.work.utils.ViewUtil;
 
 public class DeviceListWifiActivity extends Activity {
@@ -91,6 +94,8 @@ public class DeviceListWifiActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_device_list);
 		
+		
+		
 		loading = (ProgressBar)findViewById(R.id.loading);
 		listView = (ListView) findViewById(R.id.listview);
 		rightBtn = (ImageView) findViewById(R.id.right_btn);
@@ -120,10 +125,31 @@ public class DeviceListWifiActivity extends Activity {
 				}
 			}
 		});
-		
-		startService(new Intent(this, WifiService.class));
-
 		timer.schedule(task, 1000, 2000);
+		
+		
+		WifiInfo wifiInfo = NetUtil.getWifiInfo(this);
+		if(wifiInfo!=null){
+			String ssid = wifiInfo.getSSID();
+			
+			if(ssid.contains("1402")){
+				String ip = NetUtil.getWifiIp(wifiInfo.getIpAddress());
+				System.out.println(ip);
+				startService(new Intent(this, WifiService.class));
+			}else{
+				//dialog 跳转 连接wifi
+				Log.i("syj", "dialog 跳转更换wifi");
+				return;
+			}
+		}else{
+			//dialog 跳转 更换wifi
+			Log.i("syj", "dialog   跳转连接wifi");
+			return;
+		}
+		
+		
+
+		
 	}
 	
 	

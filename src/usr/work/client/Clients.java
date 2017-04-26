@@ -11,15 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 
 import android.util.Log;
-import usr.work.bean.Device;
 import usr.work.bean.DeviceSocket;
 import usr.work.bean.Host;
 import usr.work.utils.CRC;
@@ -71,10 +67,10 @@ public class Clients {
 			}
 		}
 		Log.i("syj", JSON.toJSONString(this.hostList));
-		for(Host host:this.hostList){
-			Log.i("syj", "deviceId:"+host.getDeviceId());
-			Log.i("syj", "deviceIp:"+host.getIp());
-		}
+//		for(Host host:this.hostList){
+//			Log.i("syj", "deviceId:"+host.getDeviceId());
+//			Log.i("syj", "deviceIp:"+host.getIp());
+//		}
 		
 	}
 	
@@ -206,12 +202,13 @@ public class Clients {
 				for (DeviceSocket deviceSocket : dsockets) {						
 					int deviceId = deviceSocket.getDeviceId();
 					if(deviceId!=0){
+						//System.out.println("unReceiveTime:"+deviceSocket.getUnReceiveTime());
 						deviceSocket.setUnReceiveTime(deviceSocket.getUnReceiveTime()-1);
-						if(deviceSocket.getUnReceiveTime()<0){
+						if(deviceSocket.getUnReceiveTime()<0 && !deviceSocket.isSending()){
 							byte[] bytes = new byte[] { (byte) deviceId, 0x03, 0x02, 0x58, 0x00, 0x64 };
 							byte[] crcBytes = CRC.getCRC(bytes);
 							sendOne(crcBytes, deviceSocket);
-							//System.out.println(Hex.printHexString(bytes));
+							System.out.println(Hex.printHexString(bytes));
 						}
 					}
 				}
@@ -229,21 +226,28 @@ public class Clients {
 		}
 	}
 	
-	public void sendUpdate(int deviceId,List<byte[]> sendQueue){
+	public boolean sendUpdate(int deviceId,List<byte[]> sendQueue){
 		DeviceSocket deviceSocket = getDeviceSocket(deviceId);
 		if(deviceSocket!=null){
 			deviceSocket.setSending(true);
-			sleep();
-			for(byte[] bytes:sendQueue){
-				byte[] crcBytes = CRC.getCRC(bytes);
-				System.out.println(new Date().toLocaleString()+",deviceId:"+deviceId+",send:"+Hex.printHexString(crcBytes));
-				deviceSocket = getDeviceSocket(deviceId);
-				sendOne(crcBytes, deviceSocket);
+			sleepLong();
+			if(deviceSocket.getUnReceiveTime()<0){
+				for(byte[] bytes:sendQueue){
+					byte[] crcBytes = CRC.getCRC(bytes);
+					System.out.println(new Date().toLocaleString()+",deviceId:"+deviceId+",send:"+Hex.printHexString(crcBytes));
+					deviceSocket = getDeviceSocket(deviceId);
+					sendOne(crcBytes, deviceSocket);
+					sleep();
+				}
 				sleep();
+				deviceSocket.setSending(false);
+				return true;
+			}else{
+				deviceSocket.setSending(false);
+				return false;
 			}
-			sleep();
-			deviceSocket.setSending(false);
 		}
+		return false;
 	}
 	
 	private DeviceSocket getDeviceSocket(int deviceId){
@@ -268,22 +272,72 @@ public class Clients {
 		}
 	}
 	
-	public void updateDevice(Map<String, Object> paramMap){
-		int deviceId = 0;
-		for (Map.Entry<String, Object> entry : paramMap.entrySet()) { 
-			if(entry.getKey().equals("deviceId")){
-				deviceId = Integer.parseInt(entry.getValue().toString());
-				break;
-			}
+	private void sleepLong(){
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	}
+	
+	public boolean updateDevice(int deviceId, Map<String, Object> paramMap){
+		
+		List<byte[]> sendQueue = new ArrayList<byte[]>();
 		for (Map.Entry<String, Object> entry : paramMap.entrySet()) { 
-			List<byte[]> sendQueue = new ArrayList<byte[]>();
-			
-			if(!entry.getKey().equals("areaId")&&!!entry.getKey().equals("deviceId")){
-				Log.i("syj", deviceId+"");
-				Log.i("syj", entry.getKey() + "=" + entry.getValue());
+			if(entry.getKey().equals("tempUpLimit")){
+				int tempUpLimit = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x79,0x00,(byte) tempUpLimit};
+				sendQueue.add(bytes);
 			}
+			if(entry.getKey().equals("tempDownLimit")){
+				int tempDownLimit = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7a,0x00,(byte) tempDownLimit};
+				sendQueue.add(bytes);
+			}
+			if(entry.getKey().equals("hrUpLimit")){
+				int hrUpLimit = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7b,0x00,(byte) hrUpLimit};
+				sendQueue.add(bytes);
+			}
+			if(entry.getKey().equals("hrDownLimit")){
+				int hrDownLimit = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7c,0x00,(byte) hrDownLimit};
+				sendQueue.add(bytes);
+			}
+			if(entry.getKey().equals("dpUpLimit")){
+				int dpUpLimit = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7d,0x00,(byte) dpUpLimit};
+				sendQueue.add(bytes);
+			}
+			if(entry.getKey().equals("dpDownLimit")){
+				int dpDownLimit = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7e,0x00,(byte) dpDownLimit};
+				sendQueue.add(bytes);
+			}
+			if(entry.getKey().equals("tempAlarmClose")){
+				int tempAlarmClose = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7f,0x00,(byte) tempAlarmClose};
+				sendQueue.add(bytes);
+			}
+			if(entry.getKey().equals("hrAlarmClose")){
+				int hrAlarmClose = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,(byte) 0x80,0x00,(byte) hrAlarmClose};
+				sendQueue.add(bytes);
+			}
+			if(entry.getKey().equals("dpAlarmClose")){
+				int dpAlarmClose = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,(byte) 0x81,0x00,(byte) dpAlarmClose};
+				sendQueue.add(bytes);
+			}
+			if(entry.getKey().equals("inWindAlarmClose")){
+				int inWindAlarmClose = Integer.parseInt(entry.getValue().toString());
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,(byte) 0x82,0x00,(byte) inWindAlarmClose};
+				sendQueue.add(bytes);
+			}
+			
 	    } 
+		return sendUpdate(deviceId, sendQueue);
 	}
 
 }
