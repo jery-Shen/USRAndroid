@@ -104,11 +104,6 @@ public class ClientThread extends Thread{
 		device.setHrOff(Hex.parseHex4(bytes[29], bytes[30]));
 		device.setHrReally(Hex.parseHex4(bytes[31], bytes[32]));
 
-		device.setCommunicateFalse(Hex.parseHex4(bytes[35], bytes[36]));
-		device.setCommunicateTrue(Hex.parseHex4(bytes[37], bytes[38]));
-		device.setInfoBar(Hex.parseHex4(bytes[39], bytes[40]));
-		device.setStateSwitch(Hex.parseHex4(bytes[41], bytes[42]));
-
 		device.setDp(Hex.parseHex4(bytes[43], bytes[44])); // >125
 		device.setDpUpLimit(Hex.parseHex4(bytes[45], bytes[46]));
 		device.setDpDownLimit(Hex.parseHex4(bytes[47], bytes[48]));
@@ -116,6 +111,11 @@ public class ClientThread extends Thread{
 		device.setDpReally(Hex.parseHex4(bytes[51], bytes[52]));
 		device.setDpTarget(Hex.parseHex4(bytes[53], bytes[54]));
 		device.setAkpMode(Hex.parseHex4(bytes[55], bytes[56]));
+		
+		device.setCommunicateFalse(Hex.parseHex4(bytes[35], bytes[36]));
+		device.setCommunicateTrue(Hex.parseHex4(bytes[37], bytes[38]));
+		device.setInfoBar(Hex.parseHex4(bytes[39], bytes[40]));
+		device.setStateSwitch(Hex.parseHex4(bytes[41], bytes[42]));
 
 		device.setWorkHour(Hex.parseHex4(bytes[63], bytes[64])); //
 		device.setWorkSecond(Hex.parseHex4(bytes[65], bytes[66]));//
