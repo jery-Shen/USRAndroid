@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -84,6 +85,7 @@ public class DeviceListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_device_list);
+		((USRApplication)getApplicationContext()).deviceList.clear();
 		
 		loading = (ProgressBar)findViewById(R.id.loading);
 		listView = (ListView) findViewById(R.id.listview);
@@ -224,6 +226,7 @@ public class DeviceListActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {
+		Log.i("syj", "DeviceListActivity:onDestroy");
 		timer.cancel();
 		stopService(new Intent(this, OnlineService.class));
 		super.onDestroy();

@@ -44,7 +44,7 @@ public class WifiService extends Service{
 	
 	public void synDeviceList(){
 		List<DeviceSocket> dsockets = Clients.getInstance().dsockets;
-		((USRApplication)getApplicationContext()).deviceList.clear();
+		
 		synchronized (dsockets){
 			for (DeviceSocket deviceSocket : dsockets){
 				Device device = deviceSocket.getDevice();
@@ -68,7 +68,6 @@ public class WifiService extends Service{
 		timer.cancel();
 		Clients.getInstance().shutDown();
 		super.onDestroy();
-		 ((USRApplication)getApplicationContext()).deviceList.clear();
 	}
 	
 	@Override

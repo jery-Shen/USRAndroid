@@ -172,12 +172,12 @@ public class DeviceSetActivity extends Activity {
 			String paramsStr = params[0];
 			Map<String, Object> paramMap = JSON.parseObject(paramsStr,new TypeReference<Map<String, Object>>(){} );
 			String res = "";
-			if(NetUtil.isServerAvailable()){
-				res = "系统检测到设备在联网模式下传输数据，请切换联网模式后再修改设备参数";
-			}else if(!Clients.getInstance().updateDevice(deviceId,paramMap)){
+			if(!Clients.getInstance().updateDevice(deviceId,paramMap)){
 				res = "设备正在被其他终端操控，请关闭其他终端后再修改";
+				if(NetUtil.Online(0)!=0){
+					res = "系统检测到设备在联网模式下传输数据，请切换联网模式后再修改设备参数";
+				}
 			}
-			
 			return res;
 		}
 		

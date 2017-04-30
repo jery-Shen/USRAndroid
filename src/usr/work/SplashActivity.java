@@ -3,12 +3,10 @@ package usr.work;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Window;
-import usr.work.utils.NetUtil;
 
 public class SplashActivity extends Activity {
 
@@ -17,6 +15,8 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_splash);
+	
+		
 		
 		SharedPreferences preferences = getSharedPreferences("set", 0);
 		String userStr = preferences.getString("user", "");
@@ -43,5 +43,11 @@ public class SplashActivity extends Activity {
 			
 		}
 		
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		
+		super.onNewIntent(intent);
 	}
 }

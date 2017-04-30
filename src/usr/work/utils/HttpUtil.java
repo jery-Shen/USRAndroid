@@ -9,15 +9,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSON;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import usr.work.bean.User;
 
 public class HttpUtil {
 	public final static String URL_PRE = "http://usr.lightxx.cn/";
+	//public final static String URL_PRE = "http://192.168.1.253:8080/USR/";
 	
 	public static String getStrFromUrl(String url){
 		
@@ -26,7 +22,8 @@ public class HttpUtil {
 		StringBuffer buffer = new StringBuffer();
 		try {
 			conn = (HttpURLConnection) new URL(url).openConnection();
-			conn.setConnectTimeout(6000);
+			conn.setConnectTimeout(2000);
+			conn.setReadTimeout(2000);
 			conn.setDoInput(true);
     		conn.setUseCaches(false);
     		InputStream is = conn.getInputStream();
@@ -51,7 +48,7 @@ public class HttpUtil {
 			conn = (HttpURLConnection) new URL(url).openConnection();
 			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			conn.setRequestMethod("POST");
-			conn.setConnectTimeout(6000);
+			conn.setConnectTimeout(3000);
 			conn.setDoOutput(true);   //需要输出
 			conn.setDoInput(true); 
     		conn.setUseCaches(false);
@@ -73,6 +70,8 @@ public class HttpUtil {
 		return buffer.toString();
 	}
 	
+	
+	
 	public static Map<String, String> getSign(User user){
 		HashMap<String, String>  map = new HashMap<String, String>();
 		String token = user.getUserName();
@@ -83,4 +82,6 @@ public class HttpUtil {
 		map.put("sign", sign);
 		return map;
 	}
+	
+	
 }

@@ -8,7 +8,10 @@ import java.util.TimerTask;
 import com.alibaba.fastjson.JSON;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -93,8 +96,7 @@ public class DeviceListWifiActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_device_list);
-		
-		
+		((USRApplication)getApplicationContext()).deviceList.clear();
 		
 		loading = (ProgressBar)findViewById(R.id.loading);
 		listView = (ListView) findViewById(R.id.listview);
@@ -138,12 +140,32 @@ public class DeviceListWifiActivity extends Activity {
 				startService(new Intent(this, WifiService.class));
 			}else{
 				//dialog 跳转 连接wifi
+				new  AlertDialog.Builder(this )   
+	    		.setMessage("\n当前连接的wifi不是ivc,是否去更换\n")  
+	    		.setPositiveButton("取消" ,  null)  
+	    		.setNegativeButton("确定" , new Dialog.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						startActivity(new Intent("android.settings.WIFI_SETTINGS"));
+					}
+				})  
+	    		.show();
 				Log.i("syj", "dialog 跳转更换wifi");
 				return;
 			}
 		}else{
 			//dialog 跳转 更换wifi
-			Log.i("syj", "dialog   跳转连接wifi");
+			new  AlertDialog.Builder(this )   
+    		.setMessage("\nwifi未连接到ivc,是否去连接\n")  
+    		.setPositiveButton("取消" , null)  
+    		.setNegativeButton("确定" , new Dialog.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					startActivity(new Intent("android.settings.WIFI_SETTINGS"));
+				}
+			})  
+    		.show();
+			Log.i("syj", "dialog 跳转更换wifi");
 			return;
 		}
 		
@@ -261,6 +283,7 @@ public class DeviceListWifiActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {
+		Log.i("syj", "DeviceListActivity:onDestroy");
 		timer.cancel();
 		stopService(new Intent(this, WifiService.class));
 		super.onDestroy();

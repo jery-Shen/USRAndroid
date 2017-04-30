@@ -8,25 +8,36 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
+import usr.work.R;
 import usr.work.application.USRApplication;
 import usr.work.bean.Device;
 import usr.work.bean.User;
 import usr.work.utils.HttpUtil;
+import usr.work.utils.NotificationUtil;
 
 public class OnlineService extends Service{
 
 	public User user;
 	
 	private String mUrl = HttpUtil.URL_PRE+"GetDeviceList";
+	
+	int timerCount;
+	
 	private final Timer timer = new Timer();
 	private TimerTask task = new TimerTask() {  
 	    @Override  
 	    public void run() {  
+	    	timerCount++;
+	    	if(timerCount%6==0){
+	    		NotificationUtil.pushAlarm(OnlineService.this, 1, "温度过高，当前19大于上限18", 0);
+	    	}
 	    	String url = mUrl;
 	    	Map<String, String> map =  HttpUtil.getSign(user);
 	    	if(user.getAreaId()>0){
@@ -80,7 +91,6 @@ public class OnlineService extends Service{
     public void onDestroy() { 
         timer.cancel();
         super.onDestroy();
-        ((USRApplication)getApplicationContext()).deviceList.clear();
     }  
 	
 	@Override

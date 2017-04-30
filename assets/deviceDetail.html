@@ -116,9 +116,7 @@ body{
 }
 .list-title{
     padding: 5px 15px;
-    border-bottom: solid 1px #ddd;
-    color: #000;
-    font-weight: bolder;
+    color: #333;
 }
 .list-body{
     border-top: solid 1px #ddd;
@@ -137,6 +135,15 @@ body{
     position: absolute;
     left: 135px;
 }
+
+.alarm .data{
+    font-size: 14px;
+}
+.alarm .data span{
+    position: absolute;
+    left: 160px;
+}
+
 .air .data{
     font-size: 12px;
 }
@@ -209,7 +216,7 @@ body{
     <div class="nav-tab">
         <a :class="{'active': currentView=='base'}" @click="currentView='base'">基本信息</a>
         <a :class="{'active': currentView=='sys'}" @click="currentView='sys'">系统参数</a>
-        <a :class="{'active': currentView=='air'}" @click="currentView='air'">换气速度</a>
+        <a :class="{'active': currentView=='his'}" @click="currentView='his'">历史数据</a>
     </div>
 
     <div class="tabs">
@@ -217,17 +224,36 @@ body{
             <div class="wrape">
                 <div id="myChart" class="chart" style="height: 180px;width: 100%;" v-chart="myChart"></div>
             </div>
+            
             <div class="list">
                  <div class="list-body">
-                    <div class="item col2"><div class="data">控制模式 <span>{{device.workModeStr}}</span></div></div>
+                    <!-- <div class="item col2"><div class="data">温度 <span>{{device.temp}}</span></div></div>
+                    <div class="item col2"><div class="data">温度上限 <span>{{device.tempUpLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">温度下限 <span>{{device.tempDownLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">温度偏差 <span>{{device.tempOff}}</span></div></div>
+
+                    <div class="item col2"><div class="data">湿度 <span>{{device.hr}}</span></div></div>
+                    <div class="item col2"><div class="data">湿度上限 <span>{{device.hrUpLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">湿度下限 <span>{{device.hrDownLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">湿度偏差 <span>{{device.hrOff}}</span></div></div>
+
+                    <div class="item col2"><div class="data">压差 <span>{{device.dp}}</span></div></div>
+                    <div class="item col2"><div class="data">压差上限 <span>{{device.dpUpLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">压差下限 <span>{{device.dpDownLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">压差偏差 <span>{{device.dpOff}}</span></div></div> -->
+                    
+                    <div class="item col2"><div class="data">压差目标值 <span>{{device.dpTarget}}</span></div></div>
                     <div class="item col2"><div class="data">换气次数 <span>{{device.airCount}}</span></div></div>
                     <div class="item col2"><div class="data">进风变频速度 <span>{{device.inWindSpeed}}</span></div></div>
                     <div class="item col2"><div class="data">出风变频速度 <span>{{device.outWindSpeed}}</span></div></div>
+                    <div class="item col2"><div class="data">控制模式 <span>{{device.workModeStr}}</span></div></div>
                     <div class="item col2"><div class="data">通讯连续错误 <span>{{device.communicateTrueStr}}</span></div></div>
-                    <div class="item col2"><div class="data">压差目标值 <span>{{device.dpTarget}}</span></div></div>
+                    
                     <div class="clearfix"></div>
                 </div>
             </div>
+
+            
             
            
         </div>
@@ -261,9 +287,25 @@ body{
             
         </div>
 
-        <div v-show="currentView=='air'" class="air">
+        <div v-show="currentView=='his'" class="his">
             
-            <div class="list">
+            <div class="list alarm">
+                <div class="list-title">历史报警</div>
+                <div class="list-body">
+                    <div class="item col1"><div class="data">2017-03-01 04:54:32 <span>断电报警</span></div></div>
+                    <div class="item col1"><div class="data">2017-03-12 14:54:12 <span>温度超高,当前26大于上限25</span></div></div>
+                    <div class="item col1"><div class="data">2017-03-13 04:55:22 <span>模拟量采集通讯故障</span></div></div>
+                    <div class="item col1"><div class="data">2017-04-12 05:24:48 <span>断电报警</span></div></div>
+                    <div class="item col1"><div class="data">2017-04-02 11:54:26 <span>断电报警</span></div></div>
+                    <div class="item col1"><div class="data">2017-05-02 08:54:41 <span>温度超高,当前28大于上限25</span></div></div>
+                   
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+
+            <div class="list air">
+                <div class="list-title">换气速度</div>
                 <div class="list-body">
                     <div class="item col4"><div class="data">10次: <span>{{device.airSpeed10}}</span></div></div>
                     <div class="item col4"><div class="data">12次: <span>{{device.airSpeed12}}</span></div></div>
@@ -315,7 +357,7 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
             setTimeout(function() {
                 that.myChart = echarts.init(document.getElementById('myChart'));
                 that.drawChart()
-            }, 500);
+            }, 300);
             
             
         },
@@ -421,7 +463,7 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
                                     },
                                 }
                             },
-                            data: [this.device.inWindSpeed, this.device.outWindSpeed, this.device.dp, this.device.hr, this.device.temp,]
+                            data: [this.device.outWindSpeed, this.device.inWindSpeed, this.device.dp, this.device.hr, this.device.temp,]
                         }
                     ]
                 };
