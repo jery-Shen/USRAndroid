@@ -35,6 +35,7 @@ import android.widget.Toast;
 import usr.work.application.USRApplication;
 import usr.work.bean.Device;
 import usr.work.service.OnlineService;
+import usr.work.utils.NotificationUtil;
 import usr.work.utils.ViewUtil;
 
 public class DeviceListActivity extends Activity {
@@ -210,6 +211,12 @@ public class DeviceListActivity extends Activity {
 			firstExitTime = curTime;
 		}
 		
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		NotificationUtil.cancel(this);
+		super.onNewIntent(intent);
 	}
 	
 	@Override

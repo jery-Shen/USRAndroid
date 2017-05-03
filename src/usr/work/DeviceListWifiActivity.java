@@ -46,6 +46,7 @@ import usr.work.client.Clients;
 import usr.work.service.OnlineService;
 import usr.work.service.WifiService;
 import usr.work.utils.NetUtil;
+import usr.work.utils.NotificationUtil;
 import usr.work.utils.ViewUtil;
 
 public class DeviceListWifiActivity extends Activity {
@@ -267,6 +268,12 @@ public class DeviceListWifiActivity extends Activity {
 			firstExitTime = curTime;
 		}
 		
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		NotificationUtil.cancel(this);
+		super.onNewIntent(intent);
 	}
 	
 	@Override
