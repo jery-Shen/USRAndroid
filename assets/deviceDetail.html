@@ -351,7 +351,7 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 	var app = new Vue({
         created:function(){
         	var that = this;
-            //this.device = formatDevice(JSON.parse(dataStr));
+            this.device = formatDevice(JSON.parse(dataStr));
             setTimeout(function() {
                 that.myChart = echarts.init(document.getElementById('myChart'));
                 that.drawChart()
@@ -446,6 +446,7 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
                                 align:'left'
                             },
                         },
+                        //data: ['出风风速','进风风速','压差下限','压差上限','压差','湿度下限','湿度上限','湿度','温度下限','温度上限','温度']
                         data: ['出风风速','进风风速','压差','湿度','温度']
                     },
                     series: [{
@@ -461,7 +462,8 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
                                     },
                                 }
                             },
-                            data: [this.device.outWindSpeed, this.device.inWindSpeed, this.device.dp, this.device.hr, this.device.temp,]
+                            //data: [this.device.outWindSpeed, this.device.inWindSpeed, this.device.dpDownLimit, this.device.dpUpLimit, this.device.dp, this.device.hrDownLimit, this.device.hrUpLimit, this.device.hr, this.device.tempDownLimit, this.device.tempUpLimit, this.device.temp]
+                            data: [this.device.outWindSpeed, this.device.inWindSpeed, this.device.dp,this.device.hr, this.device.temp]
                         }
                     ]
                 };

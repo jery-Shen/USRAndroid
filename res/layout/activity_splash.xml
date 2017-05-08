@@ -2,10 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/splash"
     tools:context="${relativePackage}.${activityClass}" >
-	<ImageView android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:src="@drawable/splash"
-	    android:scaleType="fitXY"
-	    android:contentDescription="splash"/>
+	
 </RelativeLayout>
