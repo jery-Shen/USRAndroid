@@ -15,5 +15,6 @@
     <string name="title_activity_help">HelpActivity</string>
     <string name="title_activity_web">WebActivity</string>
     <string name="title_activity_update_pwd">UpdatePwdActivity</string>
+    <string name="title_activity_my_device">MyDeviceActivity</string>
 
 </resources>

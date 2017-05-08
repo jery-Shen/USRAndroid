@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash"
+    android:background="@drawable/login_bg"
     tools:context="${relativePackage}.${activityClass}" >
     
     <ScrollView
@@ -23,11 +23,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
+            
+            <ImageView
+               android:layout_marginTop="20dp"
+                    android:layout_width="220dp"
+                    android:layout_height="200dp"
+                   android:layout_gravity="center"
+                    android:src="@drawable/title" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_marginTop="220dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="13dp">
@@ -36,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_launcher" />
+                    android:src="@drawable/icon_user" />
 
                 <EditText
                     android:id="@+id/username"
@@ -45,7 +52,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:hint="用户名"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:maxLength="11"
                     android:maxLines="1"
                     android:textColor="#fff"
@@ -70,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_launcher" />
+                    android:src="@drawable/icon_pwd" />
 
                 <EditText
                     android:id="@+id/userpwd"
@@ -99,7 +106,7 @@
                 android:id="@+id/loginbtn"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="21dp"
                 android:background="@drawable/layer_btn_border"
                 android:text="登录"

@@ -31,12 +31,13 @@ body {
         </div>
 
         <div class="weui-cells">
-        	<div class="weui-cell" @click="updateHost()">
+            <a class="weui-cell weui-cell_access" href="javascript:;" @click="host()">
                 <div class="weui-cell__bd">
-                    <p>更新设备</p>
+                    <p>我的设备</p>
                 </div>
-                <div class="weui-cell__ft">更新</div>
-            </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
             <a class="weui-cell weui-cell_access" href="javascript:;" @click="help()">
                 <div class="weui-cell__bd">
                     <p>帮助系统</p>
@@ -90,8 +91,8 @@ var app = new Vue({
 		userInfo:function(){
 			window.JsBridge.userInfo();
 		},
-		updateHost:function(){
-			window.JsBridge.updateHost();
+		host:function(){
+			window.JsBridge.host();
 		},
 		about:function(){
 			window.JsBridge.about();
