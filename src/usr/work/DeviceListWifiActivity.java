@@ -250,6 +250,7 @@ public class DeviceListWifiActivity extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i("syj", "resultCode:"+resultCode);
 		if(resultCode==9){
 			Intent intent = new Intent(DeviceListWifiActivity.this, LoginActivity.class);
 			startActivity(intent);

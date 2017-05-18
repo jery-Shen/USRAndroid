@@ -158,7 +158,6 @@ public class DeviceDetailActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		
 		if(resultCode==8){
 			if(device!=null){
 				device = getDeviceById(areaId,deviceId);//把device传过来

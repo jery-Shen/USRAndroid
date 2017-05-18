@@ -190,17 +190,7 @@ public class DeviceListActivity extends Activity {
 		
 
 	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(resultCode==9){
-			Intent intent = new Intent(DeviceListActivity.this, LoginActivity.class);
-			startActivity(intent);
-			DeviceListActivity.this.finish();
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-	
+
 	@Override
 	public void onBackPressed() {// 覆盖返回键
 		long curTime = System.currentTimeMillis();
@@ -216,12 +206,20 @@ public class DeviceListActivity extends Activity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		NotificationUtil.cancel(this);
+		
 		super.onNewIntent(intent);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
+		SharedPreferences preferences = getSharedPreferences("set", 0);
+		String userStr = preferences.getString("user", "");
+		if(userStr.equals("")){
+			Intent intent = new Intent(DeviceListActivity.this, LoginActivity.class);
+			startActivity(intent);
+			DeviceListActivity.this.finish();
+		}
 	}
 	
 	@Override

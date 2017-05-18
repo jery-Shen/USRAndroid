@@ -31,6 +31,7 @@ body{
 
 
 .infoBar{
+	height:42px;
 	margin-top:15px;
     text-align: center;
     width: 100%;
@@ -51,7 +52,7 @@ body{
     border-bottom: solid 1px #ddd;
     background: #fff;
     position: fixed;
-    top: 143px;
+    top: 165px;
     z-index: 999;
 }
 .nav-tab:after{
@@ -78,7 +79,7 @@ body{
     color: #128bed;
 }
 .tabs{
-    margin-top: 194px;
+    margin-top: 220px;
 }
 .common{
     margin-top: 20px;
@@ -210,6 +211,7 @@ body{
     <div class="head" :class="headBg">
         <p class="logo"><img src="img/logo_white.png"></p>
         <div class="infoBar">{{device.infoBarStr}}</div>
+        <div class="updateTime">{{device.updateTime}}</div>
     </div>
     <div class="nav-tab">
         <a :class="{'active': currentView=='base'}" @click="currentView='base'">基本信息</a>
@@ -219,18 +221,8 @@ body{
 
     <div class="tabs">
         <div v-show="currentView=='base'" class="base">
-            <div class="list">
-                 <div class="list-body">
-	                 <div class="item col1"><div class="data">温度 <span>{{device.temp}}</span></div></div>
-	                 <div class="item col1"><div class="data">温度上限 <span>{{device.tempUpLimit}}</span></div></div>
-	                 <div class="item col1"><div class="data">温度下限 <span>{{device.tempDownLimit}}</span></div></div>
-	                 <div class="item col1"><div class="data">湿度 <span>{{device.hr}}</span></div></div>
-                     <div class="item col1"><div class="data">湿度上限 <span>{{device.hrUpLimit}}</span></div></div>
-                     <div class="item col1"><div class="data">湿度下限 <span>{{device.hrDownLimit}}</span></div></div>
-                     <div class="item col1"><div class="data">压差 <span>{{device.dp}}</span></div></div>
-                     <div class="item col1"><div class="data">压差上限 <span>{{device.dpUpLimit}}</span></div></div>
-                     <div class="item col1"><div class="data">压差下限 <span>{{device.dpDownLimit}}</span></div></div>
-	             </div>
+            <div class="wrape">
+                <div id="myChart" class="chart" style="height: 180px;width: 100%;" v-chart="myChart"></div>
             </div>
             
             <div class="list">
@@ -271,6 +263,7 @@ body{
             <div class="list">
                 <div class="list-body">
                     <div class="item col1"><div class="data">累计工作时间 <span>{{device.workTime}}</span></div></div>
+                    
                     <div class="item col1"><div class="data">正负压模式 <span>{{device.akpModeStr}}</span></div></div>
                     <div class="item col1"><div class="data">压差传感器型号 <span>{{device.converterModelStr}}</span></div></div>
              </div>
@@ -347,6 +340,7 @@ body{
 
 <script src="js/vue.min.js"></script>
 <script src="js/vue-resource.min.js"></script>
+<script src="js/echarts.min.js"></script>
 <script type="text/javascript">
 var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1700,"airSpeed16":1800,"airSpeed18":1900,"airSpeed20":2000,"airSpeed22":2100,"airSpeed24":2200,"airSpeed26":2300,"airSpeed28":2400,"airSpeed30":2500,"airSpeed35":2600,"airSpeed40":2800,"airSpeed45":3000,"airSpeed50":3500,"akpMode":0,"alarmCycle":16,"areaId":0,"communicateFalse":5061,"communicateTrue":0,"converterMax":0,"converterMin":5,"converterModel":1,"cycleError":1,"deviceId":2,"dp":125,"dpAlarmClose":0,"dpDownLimit":0,"dpOff":0,"dpReally":165,"dpTarget":20,"dpUpLimit":125,"hr":63,"hrAlarmClose":0,"hrDownLimit":0,"hrOff":0,"hrReally":63,"hrUpLimit":88,"iD":0,"inWindAlarmClose":0,"inWindSpeed":4100,"infoBar":1,"online":1,"outWindSpeed":2200,"stateSwitch":2,"temp":15,"tempAlarmClose":0,"tempDownLimit":0,"tempOff":0,"tempReally":15,"tempUpLimit":25,"updateTime":"2017年4月2日 下午4:54:10","workHour":10,"workMode":0,"workSecond":980}';
 
@@ -358,7 +352,10 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
         created:function(){
         	var that = this;
             //this.device = formatDevice(JSON.parse(dataStr));
-           
+            setTimeout(function() {
+                that.myChart = echarts.init(document.getElementById('myChart'));
+                that.drawChart()
+            }, 350);
             
             
         },
@@ -388,8 +385,89 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
         methods:{
             valueChange:function(newVal,oldVal){
                 if(oldVal){
-                    
+                    this.drawChart()
                 }
+            },
+            drawChart:function(){
+                var that = this;
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        formatter: function (params, ticket, callback) {
+                            if(params[0].axisValue=='温度'){
+                                return '当前温度：'+that.device.temp+'<br>'
+                                +'温度上限：'+that.device.tempUpLimit+'<br>'
+                                +'温度下限：'+that.device.tempDownLimit;
+                            }else if(params[0].axisValue=='湿度'){
+                                return '当前湿度：'+that.device.hr+'<br>'
+                                +'湿度上限：'+that.device.hrUpLimit+'<br>'
+                                +'湿度下限：'+that.device.hrDownLimit;
+                            }else if(params[0].axisValue=='压差'){
+                                return '当前压差：'+that.device.dp+'<br>'
+                                +'压差上限：'+that.device.dpUpLimit+'<br>'
+                                +'压差下限：'+that.device.dpDownLimit;
+                            }else if(params[0].axisValue=='进风风速'){
+                                return '进风风速：'+that.device.inWindSpeed;
+                            }else if(params[0].axisValue=='出风风速'){
+                                return '出风风速：'+that.device.outWindSpeed;
+                            }else{
+                                return '未知';
+                            }
+                            console.info(params[0].axisValue);
+                            
+                        }
+                    },
+                    color:['#128bed'],
+                    grid: {
+                        top : '2%',
+                        left: '-48px',
+                        right: '8%',
+                        bottom: '-10%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        show:false,
+                    },
+                    yAxis: {
+                        type: 'category',
+                        axisLine:{
+                            show:false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel:{
+                            margin:58,
+                            textStyle:{
+                                color:'#333',
+                                align:'left'
+                            },
+                        },
+                        //data: ['出风风速','进风风速','压差下限','压差上限','压差','湿度下限','湿度上限','湿度','温度下限','温度上限','温度']
+                        data: ['出风风速','进风风速','压差','湿度','温度']
+                    },
+                    series: [{
+
+                            type: 'bar',
+                            barWidth:20,
+                            label:{
+                                normal:{
+                                    show: true,
+                                    position: 'right',
+                                    textStyle:{
+                                        color:'#333',
+                                    },
+                                }
+                            },
+                            //data: [this.device.outWindSpeed, this.device.inWindSpeed, this.device.dpDownLimit, this.device.dpUpLimit, this.device.dp, this.device.hrDownLimit, this.device.hrUpLimit, this.device.hr, this.device.tempDownLimit, this.device.tempUpLimit, this.device.temp]
+                            data: [this.device.outWindSpeed, this.device.inWindSpeed, this.device.dp,this.device.hr, this.device.temp]
+                        }
+                    ]
+                };
+                this.myChart.setOption(option);
             }
         }
 	}).$mount('#app');
