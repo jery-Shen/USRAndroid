@@ -58,6 +58,7 @@ public class Device {
 	private int airSpeed40;			//40次换气速度
 	private int airSpeed45;			//45次换气速度
 	private int airSpeed50;			//50次换气速度
+	private String alarmHistory;	//历史报警
 
 	public int getID() {
 		return ID;

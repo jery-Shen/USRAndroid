@@ -336,7 +336,7 @@ public class DeviceListWifiActivity extends Activity {
 				holder.info.setTextColor(Color.parseColor("#e64340"));
 				holder.info.setBackground(getResources().getDrawable(R.drawable.layer_border_warn));
 			}
-			holder.title.setText("设备"+info.getDeviceId());
+			holder.title.setText("智控"+info.getDeviceId());
 			holder.content.setText("温度:"+info.getTemp()+"，湿度:"+info.getHr()+"，压差:"+info.getDp());
 			holder.des.setText("换气期数:"+info.getAirCount()+"，进风速度:"+df.format(info.getInWindSpeed()/100)+"，目标压差:"+info.getDpTarget());
 			holder.time.setText(info.getUpdateTime());

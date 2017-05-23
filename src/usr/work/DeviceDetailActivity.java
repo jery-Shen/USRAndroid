@@ -62,6 +62,7 @@ public class DeviceDetailActivity extends Activity {
 					}else{
 						findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#e64340"));
 					}
+					
 					webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
 				}
 				//Log.i("syj", JSON.toJSONString(device));
@@ -80,7 +81,7 @@ public class DeviceDetailActivity extends Activity {
 		areaId = getIntent().getIntExtra("areaId", 0);
 		deviceId = getIntent().getIntExtra("deviceId", 0);
 		top_title = (TextView) findViewById(R.id.top_title);
-		top_title.setText("设备"+deviceId);
+		top_title.setText("ivc智控"+deviceId);
 		backBtn();
 		
 		device = getDeviceById(areaId,deviceId);

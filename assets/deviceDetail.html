@@ -296,16 +296,10 @@ body{
 
         <div v-show="currentView=='his'" class="his">
             
-            <div class="list alarm">
+            <div v-if="alarms.length>0" class="list alarm">
                 <div class="list-title">历史报警</div>
                 <div class="list-body">
-                    <div class="item col1"><div class="data">2017-03-01 04:54:32 <span>断电报警</span></div></div>
-                    <div class="item col1"><div class="data">2017-03-12 14:54:12 <span>温度超高,当前26大于上限25</span></div></div>
-                    <div class="item col1"><div class="data">2017-03-13 04:55:22 <span>模拟量采集通讯故障</span></div></div>
-                    <div class="item col1"><div class="data">2017-04-12 05:24:48 <span>断电报警</span></div></div>
-                    <div class="item col1"><div class="data">2017-04-02 11:54:26 <span>断电报警</span></div></div>
-                    <div class="item col1"><div class="data">2017-05-02 08:54:41 <span>温度超高,当前28大于上限25</span></div></div>
-                   
+                    <div v-for="alarm in alarms" class="item col1"><div class="data">{{alarm.time}} <span>{{alarm.msg}}</span></div></div>
                     <div class="clearfix"></div>
                 </div>
 
@@ -352,7 +346,11 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 
 	function onData(data){
         app.device = formatDevice(JSON.parse(data));
-		
+       /*  var alarms = JSON.parse(app.device.alarmHistory);
+        if(alarms.length>0){
+        	alarms.reverse();
+        	app.alarms = alarms;
+        } */
 	}
 	var app = new Vue({
         created:function(){
@@ -366,6 +364,7 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
             currentView: 'base',
             deviceId:1,
             device:{},
+            alarms:[],
             myChart:{},
             headBg:''
         },

@@ -53,7 +53,7 @@ public class DeviceSetActivity extends Activity {
 		deviceId = getIntent().getIntExtra("deviceId", 0);
 		
 		top_title = (TextView) findViewById(R.id.top_title);
-		top_title.setText("设备"+deviceId);
+		top_title.setText("ivc智控"+deviceId);
 		backBtn();
 		
 		rightBtn = (ImageView) findViewById(R.id.right_btn);

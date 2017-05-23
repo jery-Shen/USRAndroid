@@ -54,7 +54,7 @@ public class SplashActivity extends Activity {
 						SplashActivity.this.finish();
 					}
 				}
-			}, 1000);
+			}, 1500);
 		}
 	}
 	
@@ -84,6 +84,10 @@ public class SplashActivity extends Activity {
 					editor.commit();
 				}else{
 					pwdInvalid = true;
+					SharedPreferences preferences = getSharedPreferences("set", 0);
+					Editor editor = preferences.edit();
+					editor.putString("user", "");
+					editor.commit();
 					Toast.makeText(SplashActivity.this, "密码失效，请重新登录",Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
 					startActivity(intent);
