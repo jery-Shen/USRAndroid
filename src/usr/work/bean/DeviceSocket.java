@@ -11,6 +11,7 @@ public class DeviceSocket {
 	private Device device;
 	private boolean sending;
 	private int UnReceiveTime;
+	private int receiveCount;
 	
 	public int getAreaId() {
 		return areaId;
@@ -53,6 +54,12 @@ public class DeviceSocket {
 	}
 	public void setSending(boolean sending) {
 		this.sending = sending;
+	}
+	public int getReceiveCount() {
+		return receiveCount;
+	}
+	public void setReceiveCount(int receiveCount) {
+		this.receiveCount = receiveCount;
 	}
 	
 	

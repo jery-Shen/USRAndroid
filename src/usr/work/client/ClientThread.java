@@ -149,8 +149,9 @@ public class ClientThread extends Thread{
 		device.setUpdateTime(formatDate(new Date()));
 		
 		if(device.getDeviceId()!=0 && device.getTemp()!=0){
-			deviceSocket.setUnReceiveTime(1);
 			deviceSocket.setDevice(device);
+			deviceSocket.setUnReceiveTime(1);
+			deviceSocket.setReceiveCount(deviceSocket.getReceiveCount()+1);
 			//System.out.println(device);
 		}
 	}
