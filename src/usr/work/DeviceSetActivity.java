@@ -86,7 +86,7 @@ public class DeviceSetActivity extends Activity {
 			public void onPageFinished(WebView view, String url) {
 				// TODO Auto-generated method stub
 				super.onPageFinished(view, url);
-				webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
+				webView.loadUrl("javascript:onData('"+JSON.toJSONString(device).replace("\\", "\\\\")+"')");
 			}
 		});
 		

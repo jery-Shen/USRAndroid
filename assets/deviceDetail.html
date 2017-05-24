@@ -224,9 +224,19 @@ body{
 	                 <div class="item col1"><div class="data">温度 <span>{{device.temp}}</span></div></div>
 	                 <div class="item col1"><div class="data">温度上限 <span>{{device.tempUpLimit}}</span></div></div>
 	                 <div class="item col1"><div class="data">温度下限 <span>{{device.tempDownLimit}}</span></div></div>
+	             </div>
+            </div>
+            
+            <div class="list">
+                 <div class="list-body">
 	                 <div class="item col1"><div class="data">湿度 <span>{{device.hr}}</span></div></div>
                      <div class="item col1"><div class="data">湿度上限 <span>{{device.hrUpLimit}}</span></div></div>
                      <div class="item col1"><div class="data">湿度下限 <span>{{device.hrDownLimit}}</span></div></div>
+	             </div>
+            </div>
+            
+            <div class="list">
+                 <div class="list-body">
                      <div class="item col1"><div class="data">压差 <span>{{device.dp}}</span></div></div>
                      <div class="item col1"><div class="data">压差上限 <span>{{device.dpUpLimit}}</span></div></div>
                      <div class="item col1"><div class="data">压差下限 <span>{{device.dpDownLimit}}</span></div></div>
@@ -346,11 +356,11 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 
 	function onData(data){
         app.device = formatDevice(JSON.parse(data));
-       /*  var alarms = JSON.parse(app.device.alarmHistory);
+        var alarms = JSON.parse(app.device.alarmHistory);
         if(alarms.length>0){
         	alarms.reverse();
         	app.alarms = alarms;
-        } */
+        }
 	}
 	var app = new Vue({
         created:function(){

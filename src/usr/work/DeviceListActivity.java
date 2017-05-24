@@ -98,12 +98,14 @@ public class DeviceListActivity extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				Intent intent = new Intent(DeviceListActivity.this,DeviceDetailActivity.class);
-				Device info = mDataList.get(position);
-				intent.putExtra("areaId",info.getAreaId());
-				intent.putExtra("deviceId",info.getDeviceId());
 				
-				startActivity(intent);
+				Device info = mDataList.get(position);
+				if(info.getOnline()==1){
+					Intent intent = new Intent(DeviceListActivity.this,DeviceDetailActivity.class);
+					intent.putExtra("areaId",info.getAreaId());
+					intent.putExtra("deviceId",info.getDeviceId());
+					startActivity(intent);
+				}
 			}
 		});
 		

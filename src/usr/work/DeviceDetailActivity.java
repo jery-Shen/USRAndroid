@@ -63,7 +63,7 @@ public class DeviceDetailActivity extends Activity {
 						findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#e64340"));
 					}
 					
-					webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
+					webView.loadUrl("javascript:onData('"+JSON.toJSONString(device).replace("\\", "\\\\")+"')");
 				}
 				//Log.i("syj", JSON.toJSONString(device));
 			}
@@ -119,7 +119,7 @@ public class DeviceDetailActivity extends Activity {
 			public void onPageFinished(WebView view, String url) {
 				// TODO Auto-generated method stub
 				super.onPageFinished(view, url);
-				webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
+				webView.loadUrl("javascript:onData('"+JSON.toJSONString(device).replace("\\", "\\\\")+"')");
 			}
 		});
 		
@@ -162,7 +162,7 @@ public class DeviceDetailActivity extends Activity {
 		if(resultCode==8){
 			if(device!=null){
 				device = getDeviceById(areaId,deviceId);//把device传过来
-				webView.loadUrl("javascript:onData('"+JSON.toJSONString(device)+"')");
+				webView.loadUrl("javascript:onData('"+JSON.toJSONString(device).replace("\\", "\\\\")+"')");
 			}
 		}
 	}
