@@ -33,16 +33,6 @@ public class USRApplication extends Application{
 		}
 		return null;
 	}
-	
-	public List<Device> getDeviceList() {
-		List<Device> devices = new ArrayList<Device>();
-		if (deviceList!=null && deviceList.size() > 0) {
-			for (Device device : deviceList) {
-				devices.add(device);
-			}
-		}
-		return devices;
-	}
 
 	
 }

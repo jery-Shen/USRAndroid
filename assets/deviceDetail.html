@@ -7,10 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>设备详情</title>
 	<link rel="stylesheet" type="text/css" href="css/weui.min.css">
+
 <style type="text/css">
 body{
 	background: #f8f8f8;
 }
+
+
 .head{
     color: #fff;
     padding: 15px 15px;
@@ -130,7 +133,7 @@ body{
 }
 .base .data span{
     position: absolute;
-    left: 135px;
+    left: 120px;
 }
 .sys .data span{
     position: absolute;
@@ -141,8 +144,7 @@ body{
     font-size: 14px;
 }
 .alarm .data span{
-    position: absolute;
-    left: 160px;
+    margin-left: 10px;
 }
 
 .air .data{
@@ -150,7 +152,7 @@ body{
 }
 .air .data span{
     position: absolute;
-    left: 50px;
+    left: 45px;
 }
 
 .clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
@@ -282,6 +284,7 @@ body{
             
             <div class="list">
                 <div class="list-body">
+                    <div class="item col1"><div class="data">最后更新作时间 <span>{{device.updateTime}}</span></div></div>
                     <div class="item col1"><div class="data">累计工作时间 <span>{{device.workTime}}</span></div></div>
                     <div class="item col1"><div class="data">正负压模式 <span>{{device.akpModeStr}}</span></div></div>
                     <div class="item col1"><div class="data">压差传感器型号 <span>{{device.converterModelStr}}</span></div></div>
@@ -354,7 +357,7 @@ body{
 <script src="js/vue.min.js"></script>
 <script src="js/vue-resource.min.js"></script>
 <script type="text/javascript">
-var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1700,"airSpeed16":1800,"airSpeed18":1900,"airSpeed20":2000,"airSpeed22":2100,"airSpeed24":2200,"airSpeed26":2300,"airSpeed28":2400,"airSpeed30":2500,"airSpeed35":2600,"airSpeed40":2800,"airSpeed45":3000,"airSpeed50":3500,"akpMode":0,"alarmCycle":16,"areaId":0,"communicateFalse":5061,"communicateTrue":0,"converterMax":0,"converterMin":5,"converterModel":1,"cycleError":1,"deviceId":2,"dp":125,"dpAlarmClose":0,"dpDownLimit":0,"dpOff":0,"dpReally":165,"dpTarget":20,"dpUpLimit":125,"hr":63,"hrAlarmClose":0,"hrDownLimit":0,"hrOff":0,"hrReally":63,"hrUpLimit":88,"iD":0,"inWindAlarmClose":0,"inWindSpeed":4100,"infoBar":1,"online":1,"outWindSpeed":2200,"stateSwitch":2,"temp":15,"tempAlarmClose":0,"tempDownLimit":0,"tempOff":0,"tempReally":15,"tempUpLimit":25,"updateTime":"2017年4月2日 下午4:54:10","workHour":10,"workMode":0,"workSecond":980}';
+var dataStr = '{"airCount":22,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1700,"airSpeed16":1800,"airSpeed18":1900,"airSpeed20":2000,"airSpeed22":2100,"airSpeed24":2200,"airSpeed26":2300,"airSpeed28":2400,"airSpeed30":2500,"airSpeed35":2600,"airSpeed40":2800,"airSpeed45":3000,"airSpeed50":3500,"akpMode":0,"alarmCycle":0,"alarmHistory":"[{\\"msg\\":\\"断电报警\\",\\"time\\":\\"2017-05-23 14:45:41\\"},{\\"msg\\":\\"温度超高,当前26大于上限25\\",\\"time\\":\\"2017-05-23 14:46:00\\"},{\\"msg\\":\\"模拟量采集通讯故障\\",\\"time\\":\\"2017-05-23 14:46:17\\"},{\\"msg\\":\\"断电报警\\",\\"time\\":\\"2017-05-23 14:46:29\\"},{\\"msg\\":\\"温度超高，当前26大于上限21\\",\\"time\\":\\"2017-05-23 16:00:03\\"}]","areaId":1,"communicateFalse":0,"communicateTrue":0,"converterMax":0,"converterMin":0,"converterModel":1,"cycleError":1,"deviceId":1,"deviceIp":"121.228.199.84","dp":20,"dpAlarmClose":1,"dpDownLimit":8,"dpOff":0,"dpReally":20,"dpTarget":20,"dpUpLimit":79,"hr":74,"hrAlarmClose":1,"hrDownLimit":8,"hrOff":0,"hrReally":74,"hrUpLimit":78,"iD":0,"inWindAlarmClose":0,"inWindSpeed":2800,"infoBar":1,"online":1,"outWindSpeed":2100,"stateSwitch":2,"temp":24,"tempAlarmClose":0,"tempDownLimit":10,"tempOff":0,"tempReally":24,"tempUpLimit":55,"updateTime":"2017-05-24 09:29:45","workHour":986,"workMode":1,"workSecond":1077}';
 
 	function onData(data){
         app.device = formatDevice(JSON.parse(data));
@@ -367,7 +370,12 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 	var app = new Vue({
         created:function(){
         	var that = this;
-            //this.device = formatDevice(JSON.parse(dataStr));
+            // this.device = formatDevice(JSON.parse(dataStr));
+            // var alarms = JSON.parse(this.device.alarmHistory);
+            // if(alarms.length>0){
+            //     alarms.reverse();
+            //     this.alarms = alarms;
+            // }
            
             
             
