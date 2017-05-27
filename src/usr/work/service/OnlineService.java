@@ -1,7 +1,5 @@
 package usr.work.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -54,7 +52,7 @@ public class OnlineService extends Service {
 				JSONObject jsonObject = JSON.parseObject(content);
 				if (jsonObject.getIntValue("status") == 200) {
 					JSONArray jDevices = jsonObject.getJSONArray("result");
-					USRApplication application = USRApplication.getApplication(OnlineService.this);
+					USRApplication application = USRApplication.getApplication();
 					for (int i = 0; i < jDevices.size(); i++) {
 						Device device = jDevices.getObject(i, Device.class);
 						Device localDevice = application.getDevice(device.getDeviceId());
@@ -123,7 +121,7 @@ public class OnlineService extends Service {
 	@Override
 	public void onDestroy() {
 		timer.cancel();
-		USRApplication.getApplication(this).deviceList.clear();
+		USRApplication.getApplication().deviceList.clear();
 		super.onDestroy();
 	}
 

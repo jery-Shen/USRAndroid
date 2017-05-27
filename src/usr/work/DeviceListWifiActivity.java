@@ -41,9 +41,7 @@ import android.widget.Toast;
 import usr.work.application.USRApplication;
 import usr.work.bean.Device;
 import usr.work.bean.Host;
-import usr.work.bean.User;
 import usr.work.client.Clients;
-import usr.work.service.OnlineService;
 import usr.work.service.WifiService;
 import usr.work.utils.NetUtil;
 import usr.work.utils.NotificationUtil;
@@ -78,7 +76,7 @@ public class DeviceListWifiActivity extends Activity {
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.what==6){
-				mDataList = USRApplication.getApplication(DeviceListWifiActivity.this).getDeviceList();
+				mDataList = USRApplication.getApplication().getDeviceList();
 				if(mDataList!=null&&mDataList.size()>0){
 					if(myAdapter==null){
 						myAdapter = new MyAdapter(DeviceListWifiActivity.this, R.id.listview, mDataList);
@@ -123,7 +121,7 @@ public class DeviceListWifiActivity extends Activity {
 				if (popupwindow.isShowing()) {
 					popupwindow.dismiss();
 				} else {
-					popupwindow.showAsDropDown(v, 0, ViewUtil.dpToPx(getResources(),6));
+					popupwindow.showAsDropDown(v, 0, ViewUtil.dpToPx(getResources(),9));
 				}
 			}
 		});

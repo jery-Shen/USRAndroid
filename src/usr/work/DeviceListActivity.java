@@ -67,7 +67,7 @@ public class DeviceListActivity extends Activity {
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.what==6){
-				mDataList = USRApplication.getApplication(DeviceListActivity.this).getDeviceList();
+				mDataList = USRApplication.getApplication().getDeviceList();
 				if(mDataList!=null&&mDataList.size()>0){
 					if(myAdapter==null){
 						myAdapter = new MyAdapter(DeviceListActivity.this, R.id.listview, mDataList);
@@ -115,7 +115,7 @@ public class DeviceListActivity extends Activity {
 				if (popupwindow.isShowing()) {
 					popupwindow.dismiss();
 				} else {
-					popupwindow.showAsDropDown(v, 0, ViewUtil.dpToPx(getResources(),6));
+					popupwindow.showAsDropDown(v, 0, ViewUtil.dpToPx(getResources(),9));
 				}
 			}
 		});
