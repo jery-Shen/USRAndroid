@@ -1,5 +1,6 @@
 package usr.work.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -9,16 +10,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.util.Log;
-import usr.work.R;
 import usr.work.application.USRApplication;
 import usr.work.bean.Device;
 import usr.work.bean.User;
@@ -51,19 +47,22 @@ public class OnlineService extends Service {
 			}
 			String content = HttpUtil.getStrFromUrl(url);
 			// Log.i("syj", content);
+			SharedPreferences preferences = getSharedPreferences("set", 0);
+			int  mode = preferences.getInt("mode", 0);
+			if(mode==1) return;
 			if (!content.equals("")) {
 				JSONObject jsonObject = JSON.parseObject(content);
 				if (jsonObject.getIntValue("status") == 200) {
-
 					JSONArray jDevices = jsonObject.getJSONArray("result");
+					USRApplication application = USRApplication.getApplication(OnlineService.this);
 					for (int i = 0; i < jDevices.size(); i++) {
 						Device device = jDevices.getObject(i, Device.class);
-						Device localDevice = getDeviceById(device.getDeviceId());
+						Device localDevice = application.getDevice(device.getDeviceId());
 						if (localDevice == null) {
-							((USRApplication) getApplicationContext()).deviceList.add(device);
+							application.deviceList.add(device);
 						} else {
-							int index = ((USRApplication) getApplicationContext()).deviceList.indexOf(localDevice);
-							((USRApplication) getApplicationContext()).deviceList.set(index, device);
+							int index = application.deviceList.indexOf(localDevice);
+							application.deviceList.set(index, device);
 							if (device.getInfoBar() != localDevice.getInfoBar() && device.getInfoBar() > 1) {
 								String alarmMsg = stringOfInfoBar(device.getInfoBar());
 								switch (device.getInfoBar()) {
@@ -110,17 +109,9 @@ public class OnlineService extends Service {
 		SharedPreferences preferences = getSharedPreferences("set", 0);
 		String userStr = preferences.getString("user", "");
 		user = JSON.parseObject(userStr, User.class);
+		
 	}
 
-	protected Device getDeviceById(int deviceId) {
-		List<Device> deviceList = ((USRApplication) getApplicationContext()).deviceList;
-		for (Device d : deviceList) {
-			if (d.getDeviceId() == deviceId) {
-				return d;
-			}
-		}
-		return null;
-	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -132,6 +123,7 @@ public class OnlineService extends Service {
 	@Override
 	public void onDestroy() {
 		timer.cancel();
+		USRApplication.getApplication(this).deviceList.clear();
 		super.onDestroy();
 	}
 

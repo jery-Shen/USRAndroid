@@ -78,7 +78,7 @@ public class DeviceListWifiActivity extends Activity {
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.what==6){
-				mDataList = ((USRApplication)getApplicationContext()).deviceList;
+				mDataList = USRApplication.getApplication(DeviceListWifiActivity.this).getDeviceList();
 				if(mDataList!=null&&mDataList.size()>0){
 					if(myAdapter==null){
 						myAdapter = new MyAdapter(DeviceListWifiActivity.this, R.id.listview, mDataList);
@@ -97,7 +97,6 @@ public class DeviceListWifiActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_device_list);
-		((USRApplication)getApplicationContext()).deviceList.clear();
 		
 		loading = (ProgressBar)findViewById(R.id.loading);
 		listView = (ListView) findViewById(R.id.listview);
@@ -291,7 +290,7 @@ public class DeviceListWifiActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {
-		Log.i("syj", "DeviceListActivity:onDestroy");
+		Log.i("syj", "DeviceListWifiActivity:onDestroy");
 		timer.cancel();
 		stopService(new Intent(this, WifiService.class));
 		super.onDestroy();

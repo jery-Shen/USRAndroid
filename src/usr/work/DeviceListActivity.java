@@ -67,7 +67,7 @@ public class DeviceListActivity extends Activity {
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.what==6){
-				mDataList = ((USRApplication)getApplicationContext()).deviceList;
+				mDataList = USRApplication.getApplication(DeviceListActivity.this).getDeviceList();
 				if(mDataList!=null&&mDataList.size()>0){
 					if(myAdapter==null){
 						myAdapter = new MyAdapter(DeviceListActivity.this, R.id.listview, mDataList);
@@ -86,7 +86,6 @@ public class DeviceListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_device_list);
-		((USRApplication)getApplicationContext()).deviceList.clear();
 		
 		loading = (ProgressBar)findViewById(R.id.loading);
 		listView = (ListView) findViewById(R.id.listview);
