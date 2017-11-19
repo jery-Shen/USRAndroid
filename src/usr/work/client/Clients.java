@@ -204,7 +204,7 @@ public class Clients {
 					if(deviceId!=0){
 						//System.out.println("unReceiveTime:"+deviceSocket.getUnReceiveTime());
 						deviceSocket.setUnReceiveTime(deviceSocket.getUnReceiveTime()-1);
-						if(deviceSocket.getUnReceiveTime()<0 && !deviceSocket.isSending()){
+						if(deviceSocket.getUnReceiveTime()<0 && !deviceSocket.isSending()){ //如果在线服务器不在扫描则扫描
 							byte[] bytes = new byte[] { (byte) deviceId, 0x03, 0x02, 0x58, 0x00, 0x64 };
 							byte[] crcBytes = CRC.getCRC(bytes);
 							sendOne(crcBytes, deviceSocket);

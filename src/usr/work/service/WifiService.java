@@ -38,7 +38,7 @@ public class WifiService extends Service{
 		user = JSON.parseObject(userStr, User.class);
 		List<Host> hostList = JSON.parseArray(hostListStr, Host.class);
 		Clients.getInstance().setHostList(hostList);
-		Clients.getInstance().initUdp("192.168.0.1");
+		Clients.getInstance().initUdp("192.168.1.1");
 		Clients.getInstance().scanAndConnect();
 	}
 	
@@ -46,6 +46,7 @@ public class WifiService extends Service{
 		List<DeviceSocket> dsockets = Clients.getInstance().dsockets;
 		
 		synchronized (dsockets){
+			((USRApplication)getApplicationContext()).deviceList.clear();
 			for (DeviceSocket deviceSocket : dsockets){
 				Device device = deviceSocket.getDevice();
 				if(device!=null){

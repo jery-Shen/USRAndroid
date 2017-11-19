@@ -135,7 +135,7 @@ public class DeviceListWifiActivity extends Activity {
 		if(wifiInfo!=null){
 			String ssid = wifiInfo.getSSID();
 			
-			if(ssid.contains("1402")){
+			if(!ssid.contains("1402")){
 				String ip = NetUtil.getWifiIp(wifiInfo.getIpAddress());
 				System.out.println(ip);
 				startService(new Intent(this, WifiService.class));
