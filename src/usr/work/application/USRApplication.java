@@ -4,16 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Application;
-import android.util.Log;
 import usr.work.bean.Device;
 
 public class USRApplication extends Application{
 	
-	public List<Device> deviceList = new ArrayList<Device>();
+	private static USRApplication application;
+	
+	public List<Device> deviceList = new ArrayList<Device>();;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.i("syj", "USRApplication");
+		application = this;
+		
 	}
+	
+	public static USRApplication getApplication(){
+		return application;
+	}
+	
+	public Device getDevice(int deviceId) {
+		if (deviceList!=null && deviceList.size() > 0) {
+			for (Device device : deviceList) {
+				if (device.getDeviceId() == deviceId) {
+					return device;
+				}
+			}
+		}
+		return null;
+	}
+
+	
 }

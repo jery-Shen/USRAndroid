@@ -67,7 +67,7 @@ public class DeviceListActivity extends Activity {
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.what==6){
-				mDataList = ((USRApplication)getApplicationContext()).deviceList;
+				mDataList = USRApplication.getApplication().deviceList;
 				if(mDataList!=null&&mDataList.size()>0){
 					if(myAdapter==null){
 						myAdapter = new MyAdapter(DeviceListActivity.this, R.id.listview, mDataList);
@@ -86,7 +86,6 @@ public class DeviceListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_device_list);
-		((USRApplication)getApplicationContext()).deviceList.clear();
 		
 		loading = (ProgressBar)findViewById(R.id.loading);
 		listView = (ListView) findViewById(R.id.listview);
@@ -116,7 +115,7 @@ public class DeviceListActivity extends Activity {
 				if (popupwindow.isShowing()) {
 					popupwindow.dismiss();
 				} else {
-					popupwindow.showAsDropDown(v, 0, ViewUtil.dpToPx(getResources(),6));
+					popupwindow.showAsDropDown(v, 0, ViewUtil.dpToPx(getResources(),9));
 				}
 			}
 		});
@@ -286,7 +285,7 @@ public class DeviceListActivity extends Activity {
 			holder.title.setText("智控"+info.getDeviceId());
 			holder.content.setText("温度:"+info.getTemp()+"，湿度:"+info.getHr()+"，压差:"+info.getDp());
 			holder.des.setText("换气期数:"+info.getAirCount()+"，进风速度:"+df.format(info.getInWindSpeed()/100)+"，目标压差:"+info.getDpTarget());
-			holder.time.setText(info.getUpdateTime());
+			holder.time.setText("");
 			return row;
 		}
 	}

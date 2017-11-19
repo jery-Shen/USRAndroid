@@ -68,6 +68,7 @@ public class WifiService extends Service{
 	public void onDestroy() {
 		timer.cancel();
 		Clients.getInstance().shutDown();
+		USRApplication.getApplication().deviceList.clear();
 		super.onDestroy();
 	}
 	
