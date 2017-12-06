@@ -77,13 +77,15 @@ public class DeviceListWifiActivity extends Activity {
 		public void handleMessage(Message msg) {
 			if(msg.what==6){
 				mDataList = USRApplication.getApplication().deviceList;
-				if(mDataList!=null&&mDataList.size()>0){
+				if(mDataList!=null){
 					if(myAdapter==null){
 						myAdapter = new MyAdapter(DeviceListWifiActivity.this, R.id.listview, mDataList);
 						listView.setAdapter(myAdapter);
-						loading.setVisibility(View.INVISIBLE);
 					}else{
 						myAdapter.notifyDataSetChanged();
+					}
+					if(mDataList.size()>0){
+						loading.setVisibility(View.INVISIBLE);
 					}
 				}
 			}
@@ -131,26 +133,29 @@ public class DeviceListWifiActivity extends Activity {
 		WifiInfo wifiInfo = NetUtil.getWifiInfo(this);
 		if(wifiInfo!=null){
 			String ssid = wifiInfo.getSSID();
-			
-			if(!ssid.contains("1402")){
-				String ip = NetUtil.getWifiIp(wifiInfo.getIpAddress());
-				System.out.println(ip);
-				startService(new Intent(this, WifiService.class));
-			}else{
-				//dialog 跳转 连接wifi
-				new  AlertDialog.Builder(this )   
-	    		.setMessage("\n当前连接的wifi不是ivc,是否去更换\n")  
-	    		.setPositiveButton("取消" ,  null)  
-	    		.setNegativeButton("确定" , new Dialog.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
-						startActivity(new Intent("android.settings.WIFI_SETTINGS"));
-					}
-				})  
-	    		.show();
-				Log.i("syj", "dialog 跳转更换wifi");
-				return;
-			}
+			String ip = NetUtil.getWifiIp(wifiInfo.getIpAddress());
+			Log.i("syj", ssid);
+			Intent intent = new Intent(this, WifiService.class);
+			intent.putExtra("wifiIp", ip);
+			startService(intent);
+			Handler handler = new Handler();
+	        handler.postDelayed(new Runnable() {
+	            @Override
+	            public void run() {
+	            	if(!Clients.getInstance().hasDevice()){
+	            		new  AlertDialog.Builder(DeviceListWifiActivity.this)   
+			    		.setMessage("\n当前连接的wifi不是ivc,是否去更换\n")  
+			    		.setPositiveButton("取消" ,  null)  
+			    		.setNegativeButton("确定" , new Dialog.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								startActivity(new Intent("android.settings.WIFI_SETTINGS"));
+							}
+						})  
+			    		.show();
+	            	}
+	            }
+	        }, 3000);
 		}else{
 			//dialog 跳转 更换wifi
 			new  AlertDialog.Builder(this )   
@@ -166,10 +171,6 @@ public class DeviceListWifiActivity extends Activity {
 			Log.i("syj", "dialog 跳转更换wifi");
 			return;
 		}
-		
-		
-
-		
 	}
 	
 	

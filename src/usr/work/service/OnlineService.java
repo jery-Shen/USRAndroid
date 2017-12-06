@@ -104,15 +104,16 @@ public class OnlineService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		SharedPreferences preferences = getSharedPreferences("set", 0);
-		String userStr = preferences.getString("user", "");
-		user = JSON.parseObject(userStr, User.class);
 		
 	}
 
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		SharedPreferences preferences = getSharedPreferences("set", 0);
+		String userStr = preferences.getString("user", "");
+		user = JSON.parseObject(userStr, User.class);
+		
 		timer.schedule(task, 0, 2000);
 		return super.onStartCommand(intent, flags, startId);
 

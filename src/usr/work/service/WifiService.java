@@ -10,6 +10,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.util.Log;
 import usr.work.application.USRApplication;
 import usr.work.bean.Device;
 import usr.work.bean.DeviceSocket;
@@ -32,14 +33,6 @@ public class WifiService extends Service{
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		SharedPreferences preferences = getSharedPreferences("set", 0);
-		String userStr = preferences.getString("user", "");
-		String hostListStr = preferences.getString("hostList", "[]");
-		user = JSON.parseObject(userStr, User.class);
-		List<Host> hostList = JSON.parseArray(hostListStr, Host.class);
-		Clients.getInstance().setHostList(hostList);
-		Clients.getInstance().initUdp("192.168.1.1");
-		Clients.getInstance().scanAndConnect();
 	}
 	
 	public void synDeviceList(){
@@ -58,7 +51,15 @@ public class WifiService extends Service{
 		
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		
+		Log.i("syj", "onStartCommand");
+		SharedPreferences preferences = getSharedPreferences("set", 0);
+		String userStr = preferences.getString("user", "");
+		String hostListStr = preferences.getString("hostList", "[]");
+		user = JSON.parseObject(userStr, User.class);
+		List<Host> hostList = JSON.parseArray(hostListStr, Host.class);
+		Clients.getInstance().setHostList(hostList);
+		Clients.getInstance().initUdp(intent.getStringExtra("wifiIp"));
+		Clients.getInstance().scanAndConnect();
 		timer.schedule(task, 0, 1000);
 		
 		return super.onStartCommand(intent, flags, startId);

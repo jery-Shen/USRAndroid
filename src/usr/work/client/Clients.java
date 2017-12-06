@@ -110,6 +110,7 @@ public class Clients {
 		int lastPoint = wifiIp.lastIndexOf('.');
 		String ipHead = wifiIp.substring(0, ++lastPoint);
 		InetAddress address = InetAddress.getByName(ipHead+"255");
+		//InetAddress address = InetAddress.getByName("10.10.13.245");
 		DatagramPacket sendDp = new DatagramPacket(bytes,bytes.length,address,48899);
 		ds.send(sendDp); 
 	}
@@ -124,7 +125,7 @@ public class Clients {
 				while(true){
 					ds.receive(receivePacket);
 					String msg = new String(receiveData).trim();
-					System.out.println(msg);
+					Log.i("syj", msg);
 					String ip = msg.split(",")[0];
 					String mac = msg.split(",")[1];
 					for(Host host:hostList){
@@ -208,7 +209,7 @@ public class Clients {
 							byte[] bytes = new byte[] { (byte) deviceId, 0x03, 0x02, 0x58, 0x00, 0x64 };
 							byte[] crcBytes = CRC.getCRC(bytes);
 							sendOne(crcBytes, deviceSocket);
-							System.out.println(Hex.printHexString(bytes));
+							//System.out.println(Hex.printHexString(bytes));
 						}
 					}
 				}
@@ -338,6 +339,13 @@ public class Clients {
 			
 	    } 
 		return sendUpdate(deviceId, sendQueue);
+	}
+	
+	public boolean hasDevice(){
+		if(dsockets.size()>0){
+			return true;
+		}
+		return false;
 	}
 
 }
