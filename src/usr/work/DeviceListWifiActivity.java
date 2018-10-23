@@ -129,6 +129,9 @@ public class DeviceListWifiActivity extends Activity {
 		});
 		timer.schedule(task, 1000, 2000);
 		
+//		Intent intent = new Intent(this, WifiService.class);
+//		intent.putExtra("wifiIp", "10.10.12.36");
+//		startService(intent);
 		
 		WifiInfo wifiInfo = NetUtil.getWifiInfo(this);
 		if(wifiInfo!=null){

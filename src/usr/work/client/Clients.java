@@ -110,6 +110,7 @@ public class Clients {
 		int lastPoint = wifiIp.lastIndexOf('.');
 		String ipHead = wifiIp.substring(0, ++lastPoint);
 		InetAddress address = InetAddress.getByName(ipHead+"255");
+		Log.i("syj", ipHead+"255");
 		//InetAddress address = InetAddress.getByName("10.10.13.245");
 		DatagramPacket sendDp = new DatagramPacket(bytes,bytes.length,address,48899);
 		ds.send(sendDp); 
