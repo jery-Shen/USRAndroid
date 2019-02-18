@@ -39,7 +39,7 @@ public class DeviceDetailActivity extends Activity {
 	private int deviceId;
 	
 	
-	DecimalFormat df = new DecimalFormat("#.00");
+	DecimalFormat df = new DecimalFormat("0.00");
 	private final Timer timer = new Timer();
 	private TimerTask task = new TimerTask() {  
 	    @Override  

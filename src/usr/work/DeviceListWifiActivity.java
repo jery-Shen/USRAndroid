@@ -61,7 +61,7 @@ public class DeviceListWifiActivity extends Activity {
 	
 	private long firstExitTime;
 	
-	DecimalFormat df = new DecimalFormat("#.00");
+	DecimalFormat df = new DecimalFormat("0.00");
 	private final Timer timer = new Timer();;
 	private TimerTask task = new TimerTask() {  
 	    @Override  
@@ -339,7 +339,7 @@ public class DeviceListWifiActivity extends Activity {
 			}
 			holder.title.setText("智控"+info.getDeviceId());
 			holder.content.setText("温度:"+info.getTemp()+"，湿度:"+info.getHr()+"，压差:"+info.getDp());
-			holder.des.setText("换气期数:"+info.getAirCount()+"，进风速度:"+df.format(info.getInWindSpeed()/100)+"，目标压差:"+info.getDpTarget());
+			holder.des.setText("换气次数:"+info.getAirCount()+"，进风速度:"+df.format(info.getInWindSpeed()/100)+"，目标压差:"+info.getDpTarget());
 			holder.time.setText("");
 			return row;
 		}
