@@ -288,33 +288,39 @@ public class Clients {
 		List<byte[]> sendQueue = new ArrayList<byte[]>();
 		for (Map.Entry<String, Object> entry : paramMap.entrySet()) { 
 			if(entry.getKey().equals("tempUpLimit")){
-				int tempUpLimit = Integer.parseInt(entry.getValue().toString());
-				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x79,0x00,(byte) tempUpLimit};
+				int tempUpLimit = Integer.parseInt(entry.getValue().toString())*10;
+				byte[] pBytes = Hex.hex4toByte(tempUpLimit);
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x79,pBytes[0],pBytes[1]};
 				sendQueue.add(bytes);
 			}
 			if(entry.getKey().equals("tempDownLimit")){
-				int tempDownLimit = Integer.parseInt(entry.getValue().toString());
-				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7a,0x00,(byte) tempDownLimit};
+				int tempDownLimit = Integer.parseInt(entry.getValue().toString())*10;
+				byte[] pBytes = Hex.hex4toByte(tempDownLimit);
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7a,pBytes[0],pBytes[1]};
 				sendQueue.add(bytes);
 			}
 			if(entry.getKey().equals("hrUpLimit")){
-				int hrUpLimit = Integer.parseInt(entry.getValue().toString());
-				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7b,0x00,(byte) hrUpLimit};
+				int hrUpLimit = Integer.parseInt(entry.getValue().toString())*10;
+				byte[] pBytes = Hex.hex4toByte(hrUpLimit);
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7b,pBytes[0],pBytes[1]};
 				sendQueue.add(bytes);
 			}
 			if(entry.getKey().equals("hrDownLimit")){
-				int hrDownLimit = Integer.parseInt(entry.getValue().toString());
-				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7c,0x00,(byte) hrDownLimit};
+				int hrDownLimit = Integer.parseInt(entry.getValue().toString())*10;
+				byte[] pBytes = Hex.hex4toByte(hrDownLimit);
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7c,pBytes[0],pBytes[1]};
 				sendQueue.add(bytes);
 			}
 			if(entry.getKey().equals("dpUpLimit")){
-				int dpUpLimit = Integer.parseInt(entry.getValue().toString());
-				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7d,0x00,(byte) dpUpLimit};
+				int dpUpLimit = Integer.parseInt(entry.getValue().toString())*10;
+				byte[] pBytes = Hex.hex4toByte(dpUpLimit);
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7d,pBytes[0],pBytes[1]};
 				sendQueue.add(bytes);
 			}
 			if(entry.getKey().equals("dpDownLimit")){
-				int dpDownLimit = Integer.parseInt(entry.getValue().toString());
-				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7e,0x00,(byte) dpDownLimit};
+				int dpDownLimit = Integer.parseInt(entry.getValue().toString())*10;
+				byte[] pBytes = Hex.hex4toByte(dpDownLimit);
+				byte[] bytes = new byte[]{(byte) deviceId,0x06,0x03,0x7e,pBytes[0],pBytes[1]};
 				sendQueue.add(bytes);
 			}
 			if(entry.getKey().equals("tempAlarmClose")){

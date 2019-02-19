@@ -67,5 +67,11 @@ public class Hex {
 		int b1 = bytes[pos+1]&0xff;
 		return b0*256+b1;
 	}
+	
+	public static byte[] hex4toByte(int num){
+		int hign = (int)(num/256);
+		int low = num%256;
+		return new byte[]{(byte)hign,(byte)low};
+	}
 
 }

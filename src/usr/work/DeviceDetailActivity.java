@@ -55,14 +55,7 @@ public class DeviceDetailActivity extends Activity {
 			if(msg.what==6){
 				if(device!=null){
 					device = getDeviceById(areaId,deviceId);
-					if(device.getInfoBar()==0){
-						findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#aaaaaa"));
-					}else if(device.getInfoBar()==1){
-						findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#128bed"));
-					}else{
-						findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#e64340"));
-					}
-					
+					findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#128bed"));
 					webView.loadUrl("javascript:onData('"+JSON.toJSONString(device).replace("\\", "\\\\")+"')");
 				}
 				//Log.i("syj", JSON.toJSONString(device));
@@ -85,13 +78,7 @@ public class DeviceDetailActivity extends Activity {
 		backBtn();
 		
 		device = getDeviceById(areaId,deviceId);
-		if(device.getInfoBar()==0){
-			findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#aaaaaa"));
-		}else if(device.getInfoBar()==1){
-			findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#128bed"));
-		}else{
-			findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#e64340"));
-		}
+		findViewById(R.id.tao_top_spc).setBackgroundColor(Color.parseColor("#128bed"));
 		timer.schedule(task, 500, 1000);
 		
 		rightBtn.setOnClickListener(new View.OnClickListener() {
