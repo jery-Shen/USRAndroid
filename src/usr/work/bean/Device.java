@@ -10,29 +10,29 @@ public class Device {
 	private String des;
 	private String deviceIp;
 	private String updateTime;
-	private int temp;				//温度显示值
-	private int tempUpLimit;		//温度上限
-	private int tempDownLimit;		//温度下限
-	private int tempOff;			//温度偏差
-	private int tempReally;			//温度实测
+	private float temp;				//温度显示值
+	private float tempUpLimit;		//温度上限
+	private float tempDownLimit;		//温度下限
+	private float tempOff;			//温度偏差
+	private float tempReally;			//温度实测
 	private int workMode;			//系统工作模式
 	private int airCount;			//换气次数
 	private int inWindSpeed;		//进风变频速度
 	private int outWindSpeed;		//出风变频速度
-	private int hr;					//湿度显示值
-	private int hrUpLimit;			//湿度上限
-	private int hrDownLimit;		//湿度下限
-	private int hrOff;				//湿度偏差
-	private int hrReally;			//湿度实测		
+	private float hr;					//湿度显示值
+	private float hrUpLimit;			//湿度上限
+	private float hrDownLimit;		//湿度下限
+	private float hrOff;				//湿度偏差
+	private float hrReally;			//湿度实测		
 	private int communicateFalse;	//通讯连续错误
 	private int communicateTrue;	//通讯连续正确
 	private int infoBar;			//系统信息栏
 	private int stateSwitch;		//系统开关状态
-	private int dp;					//压差显示值			
-	private int dpUpLimit;			//压差上限
-	private int dpDownLimit;		//压差下限
-	private int dpOff;				//压差偏差
-	private int dpReally;			//压差实测
+	private float dp;					//压差显示值			
+	private float dpUpLimit;			//压差上限
+	private float dpDownLimit;		//压差下限
+	private float dpOff;				//压差偏差
+	private float dpReally;			//压差实测
 	private int dpTarget;			//压差目标值
 	private int akpMode;			//正负压模式
 	private int workHour;			//累计工作小时
@@ -111,43 +111,43 @@ public class Device {
 		this.updateTime = updateTime;
 	}
 
-	public int getTemp() {
+	public float getTemp() {
 		return temp;
 	}
 
-	public void setTemp(int temp) {
+	public void setTemp(float temp) {
 		this.temp = temp;
 	}
 
-	public int getTempUpLimit() {
+	public float getTempUpLimit() {
 		return tempUpLimit;
 	}
 
-	public void setTempUpLimit(int tempUpLimit) {
+	public void setTempUpLimit(float tempUpLimit) {
 		this.tempUpLimit = tempUpLimit;
 	}
 
-	public int getTempDownLimit() {
+	public float getTempDownLimit() {
 		return tempDownLimit;
 	}
 
-	public void setTempDownLimit(int tempDownLimit) {
+	public void setTempDownLimit(float tempDownLimit) {
 		this.tempDownLimit = tempDownLimit;
 	}
 
-	public int getTempOff() {
+	public float getTempOff() {
 		return tempOff;
 	}
 
-	public void setTempOff(int tempOff) {
+	public void setTempOff(float tempOff) {
 		this.tempOff = tempOff;
 	}
 
-	public int getTempReally() {
+	public float getTempReally() {
 		return tempReally;
 	}
 
-	public void setTempReally(int tempReally) {
+	public void setTempReally(float tempReally) {
 		this.tempReally = tempReally;
 	}
 
@@ -183,43 +183,43 @@ public class Device {
 		this.outWindSpeed = outWindSpeed;
 	}
 
-	public int getHr() {
+	public float getHr() {
 		return hr;
 	}
 
-	public void setHr(int hr) {
+	public void setHr(float hr) {
 		this.hr = hr;
 	}
 
-	public int getHrUpLimit() {
+	public float getHrUpLimit() {
 		return hrUpLimit;
 	}
 
-	public void setHrUpLimit(int hrUpLimit) {
+	public void setHrUpLimit(float hrUpLimit) {
 		this.hrUpLimit = hrUpLimit;
 	}
 
-	public int getHrDownLimit() {
+	public float getHrDownLimit() {
 		return hrDownLimit;
 	}
 
-	public void setHrDownLimit(int hrDownLimit) {
+	public void setHrDownLimit(float hrDownLimit) {
 		this.hrDownLimit = hrDownLimit;
 	}
 
-	public int getHrOff() {
+	public float getHrOff() {
 		return hrOff;
 	}
 
-	public void setHrOff(int hrOff) {
+	public void setHrOff(float hrOff) {
 		this.hrOff = hrOff;
 	}
 
-	public int getHrReally() {
+	public float getHrReally() {
 		return hrReally;
 	}
 
-	public void setHrReally(int hrReally) {
+	public void setHrReally(float hrReally) {
 		this.hrReally = hrReally;
 	}
 
@@ -255,43 +255,43 @@ public class Device {
 		this.stateSwitch = stateSwitch;
 	}
 
-	public int getDp() {
+	public float getDp() {
 		return dp;
 	}
 
-	public void setDp(int dp) {
+	public void setDp(float dp) {
 		this.dp = dp;
 	}
 
-	public int getDpUpLimit() {
+	public float getDpUpLimit() {
 		return dpUpLimit;
 	}
 
-	public void setDpUpLimit(int dpUpLimit) {
+	public void setDpUpLimit(float dpUpLimit) {
 		this.dpUpLimit = dpUpLimit;
 	}
 
-	public int getDpDownLimit() {
+	public float getDpDownLimit() {
 		return dpDownLimit;
 	}
 
-	public void setDpDownLimit(int dpDownLimit) {
+	public void setDpDownLimit(float dpDownLimit) {
 		this.dpDownLimit = dpDownLimit;
 	}
 
-	public int getDpOff() {
+	public float getDpOff() {
 		return dpOff;
 	}
 
-	public void setDpOff(int dpOff) {
+	public void setDpOff(float dpOff) {
 		this.dpOff = dpOff;
 	}
 
-	public int getDpReally() {
+	public float getDpReally() {
 		return dpReally;
 	}
 
-	public void setDpReally(int dpReally) {
+	public void setDpReally(float dpReally) {
 		this.dpReally = dpReally;
 	}
 
