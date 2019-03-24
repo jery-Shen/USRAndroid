@@ -43,17 +43,6 @@ public class WifiService extends Service{
 			for (DeviceSocket deviceSocket : dsockets){
 				Device device = deviceSocket.getDevice();
 				if(device!=null){
-					if(device.getTemp()>50){
-						device.setTemp(device.getTemp()/10);
-						device.setTempUpLimit(device.getTempUpLimit()/10);
-						device.setTempDownLimit(device.getTempDownLimit()/10);
-						device.setHr(device.getHr()/10);
-						device.setHrUpLimit(device.getHrUpLimit()/10);
-						device.setHrDownLimit(device.getHrDownLimit()/10);
-						device.setDp(device.getDp()/10);
-						device.setDpUpLimit(device.getDpUpLimit()/10);
-						device.setDpDownLimit(device.getDpDownLimit()/10);
-					}
 					((USRApplication)getApplicationContext()).deviceList.add(device);
 				}
 			}
