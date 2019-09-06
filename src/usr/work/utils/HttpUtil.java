@@ -12,7 +12,7 @@ import java.util.Map;
 import usr.work.bean.User;
 
 public class HttpUtil {
-	public final static String URL_PRE = "http://usr.lightxx.cn/";
+	public final static String URL_PRE = "http://usr.lightxx.cn:8080/";
 	//public final static String URL_PRE = "http://192.168.1.253:8080/USR/";
 	
 	public static String getStrFromUrl(String url){
